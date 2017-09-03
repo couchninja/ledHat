@@ -59,6 +59,7 @@
 //
 //
 //void setup() {
+// FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);
 //  pinMode(REDPIN,   OUTPUT);
 //  pinMode(GREENPIN, OUTPUT);
 //  pinMode(BLUEPIN,  OUTPUT);

@@ -5,13 +5,13 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="0.910961921" moduleId="org.eclipse.cdt.core.settings" name="Default">
 				<externalSettings/>
 				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -28,11 +28,14 @@
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\cores\esp8266"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\variants\d1_mini"/>
 									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\src"/>
-									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
+									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ESP8266WiFi\src"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\WiFi_ID870\src"/>
+									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ESP8266mDNS"/>
+									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ArduinoOTA"/>
 									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\FastLED_ID126"/>
-									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\FastLED_ID126"/>
-									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
-									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\FastLED_ID126"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\I2Cdevlib-Core_ID11"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\I2Cdevlib-MPU6050_ID107"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\WiFi_ID870\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ArduinoOTA"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\DNSServer\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\EEPROM"/>
@@ -51,7 +54,6 @@
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SD\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SPI"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\Servo\src"/>
-									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\TFT_Touch_Shield_V2"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\Ticker"/>
@@ -79,11 +81,14 @@
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\cores\esp8266"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\variants\d1_mini"/>
 									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\src"/>
-									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
+									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ESP8266WiFi\src"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\WiFi_ID870\src"/>
+									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ESP8266mDNS"/>
+									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ArduinoOTA"/>
 									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\FastLED_ID126"/>
-									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\FastLED_ID126"/>
-									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
-									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\FastLED_ID126"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\I2Cdevlib-Core_ID11"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\I2Cdevlib-MPU6050_ID107"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\WiFi_ID870\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ArduinoOTA"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\DNSServer\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\EEPROM"/>
@@ -102,7 +107,6 @@
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SD\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SPI"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\Servo\src"/>
-									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\TFT_Touch_Shield_V2"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\Ticker"/>
@@ -130,11 +134,14 @@
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\cores\esp8266"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\variants\d1_mini"/>
 									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\src"/>
-									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
+									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ESP8266WiFi\src"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\WiFi_ID870\src"/>
+									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ESP8266mDNS"/>
+									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ArduinoOTA"/>
 									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\FastLED_ID126"/>
-									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\FastLED_ID126"/>
-									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
-									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\FastLED_ID126"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\I2Cdevlib-Core_ID11"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\I2Cdevlib-MPU6050_ID107"/>
+									<listOptionValue builtIn="false" value="C:\Data\Archive\Projects\ledHat\.piolibdeps\WiFi_ID870\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\ArduinoOTA"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\DNSServer\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\EEPROM"/>
@@ -153,7 +160,6 @@
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SD\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SPI"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\Servo\src"/>
-									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\SoftwareSerial"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\TFT_Touch_Shield_V2"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\Ticker"/>
@@ -259,6 +265,22 @@
 				<buildCommand>platformio</buildCommand>
 				<buildArguments>-f -c eclipse</buildArguments>
 				<buildTarget>init --ide eclipse</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>false</runAllBuilders>
+			</target>
+			<target name="OTA update" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>platformio</buildCommand>
+				<buildArguments>-f -c eclipse</buildArguments>
+				<buildTarget>run -t upload --upload-port 192.168.0.103</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>false</runAllBuilders>
+			</target>
+			<target name="Serial Monitor" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>platformio</buildCommand>
+				<buildArguments>-f -c eclipse</buildArguments>
+				<buildTarget>device monitor --baud 9600</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>

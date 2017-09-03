@@ -1,4 +1,4 @@
-#include <classtest.h>
+#include "classtest.h"
 
 ClassTest::ClassTest() {
 		test = 1;
