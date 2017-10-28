@@ -1,4 +1,5 @@
 #include <LedManager.h>
+
 #define NUM_LEDS 5*36
 CRGBArray<NUM_LEDS> leds;
 
@@ -13,14 +14,11 @@ void LedManager::step(AccelManager * accelManager) {
 
 	leds.fadeToBlackBy(80);    // fade everything out
 	float pitch = accelManager->ypr[1];
-	leds[(int) abs(pitch*10)] = CHSV(hue++, 255, 255);
-	i++;
-	if (i >= NUM_LEDS) {
-		i = 0;
-	}
-	// now, let's first 20 leds to the top 20 leds,
-	//leds(NUM_LEDS/2,NUM_LEDS-1) = leds(NUM_LEDS/2 - 1 ,0);
-//	FastLED.delay(50);
+//	float pitch = 2;
+	i = (pitch * 30);
+	i %= NUM_LEDS;
+
+	leds[i] = CHSV(hue++, 255, 255);
 	FastLED.show();
 }
 

@@ -1,13 +1,7 @@
 #include <AccelManager.h>
-// see https://github.com/jrowberg/i2cdevlib
-#include "I2Cdev.h"
+
 #include "MPU6050_6Axis_MotionApps20.h"
 
-// Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
-// is used in I2Cdev.h
-#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-	#include "Wire.h"
-#endif
 MPU6050 mpu;
 
 /* uncomment "OUTPUT_READABLE_QUATERNION" if you want to see the actual
@@ -42,10 +36,7 @@ MPU6050 mpu;
  * is present in this case). Could be quite handy in some cases.
  */
 //#define OUTPUT_READABLE_WORLDACCEL
-/* uncomment "OUTPUT_TEAPOT" if you want output that matches the
- * format used for the InvenSense teapot demo
- */
-//#define OUTPUT_TEAPOT
+
 // USE WITH WEMOS:
 // int -> D5
 // SCA -> D1
@@ -69,10 +60,6 @@ VectorInt16 aa;         // [x, y, z]            accel sensor measurements
 VectorInt16 aaReal; // [x, y, z]            gravity-free accel sensor measurements
 VectorInt16 aaWorld; // [x, y, z]            world-frame accel sensor measurements
 VectorFloat gravity;    // [x, y, z]            gravity vector
-
-// packet structure for InvenSense teapot demo
-uint8_t teapotPacket[14] = { '$', 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0x00, 0x00,
-		'\r', '\n' };
 
 // ================================================================
 // ===               INTERRUPT DETECTION ROUTINE                ===
@@ -99,9 +86,9 @@ AccelManager::AccelManager() {
 
 	// initialize serial communication
 	// ARON needed?
-  //	Serial.begin(9600);
-	while (!Serial)
-		; // wait for Leonardo enumeration, others continue immediately
+	//	Serial.begin(9600);
+//	while (!Serial)
+//		; // wait for Leonardo enumeration, others continue immediately
 
 	// initialize device
 	Serial.println(F("Initializing I2C devices..."));
@@ -244,12 +231,12 @@ void AccelManager::step() {
 		mpu.dmpGetQuaternion(&q, fifoBuffer);
 		mpu.dmpGetGravity(&gravity, &q);
 		mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-		Serial.print("ypr\t");
-		Serial.print(ypr[0] * 180 / M_PI);
-		Serial.print("\t");
-		Serial.print(ypr[1] * 180 / M_PI);
-		Serial.print("\t");
-		Serial.println(ypr[2] * 180 / M_PI);
+//		Serial.print("ypr\t");
+//		Serial.print(ypr[0] * 180 / M_PI);
+//		Serial.print("\t");
+//		Serial.print(ypr[1] * 180 / M_PI);
+//		Serial.print("\t");
+//		Serial.println(ypr[2] * 180 / M_PI);
 #endif
 
 #ifdef OUTPUT_READABLE_REALACCEL
@@ -282,26 +269,11 @@ void AccelManager::step() {
 		Serial.println(aaWorld.z);
 #endif
 
-#ifdef OUTPUT_TEAPOT
-		// display quaternion values in InvenSense Teapot demo format:
-		teapotPacket[2] = fifoBuffer[0];
-		teapotPacket[3] = fifoBuffer[1];
-		teapotPacket[4] = fifoBuffer[4];
-		teapotPacket[5] = fifoBuffer[5];
-		teapotPacket[6] = fifoBuffer[8];
-		teapotPacket[7] = fifoBuffer[9];
-		teapotPacket[8] = fifoBuffer[12];
-		teapotPacket[9] = fifoBuffer[13];
-		Serial.write(teapotPacket, 14);
-		teapotPacket[11]++;// packetCount, loops at 0xFF on purpose
-#endif
-
 		// blink LED to indicate activity
 		blinkState = !blinkState;
 		digitalWrite(LED_PIN, blinkState);
 	}
 }
-
 
 AccelManager::~AccelManager() {
 	// TODO Auto-generated destructor stub
