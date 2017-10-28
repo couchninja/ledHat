@@ -75,7 +75,7 @@
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.149990277" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.54121539" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
-								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1096940598" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1096940598" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\tools\sdk\include"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\tools\sdk\lwip\include"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\cores\esp8266"/>
@@ -114,7 +114,7 @@
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\esp8266\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\tool-unity"/>
 								</option>
-								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1198905600" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
+								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1198905600" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=20300"/>
 									<listOptionValue builtIn="false" value="LWIP_OPEN_SRC"/>
 									<listOptionValue builtIn="false" value="F_CPU=80000000L"/>
@@ -128,7 +128,7 @@
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.762536863" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.1310559623" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
-								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.41298875" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.41298875" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\tools\sdk\include"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\tools\sdk\lwip\include"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\cores\esp8266"/>
@@ -167,7 +167,7 @@
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\framework-arduinoespressif8266\libraries\esp8266\src"/>
 									<listOptionValue builtIn="false" value="${USERPROFILE}\.platformio\packages\tool-unity"/>
 								</option>
-								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.884639970" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
+								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.884639970" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=20300"/>
 									<listOptionValue builtIn="false" value="LWIP_OPEN_SRC"/>
 									<listOptionValue builtIn="false" value="F_CPU=80000000L"/>
@@ -272,7 +272,7 @@
 			<target name="OTA update" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>platformio</buildCommand>
 				<buildArguments>-f -c eclipse</buildArguments>
-				<buildTarget>run -t upload --upload-port 192.168.0.103</buildTarget>
+				<buildTarget>run -t upload --upload-port 192.168.0.108</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>

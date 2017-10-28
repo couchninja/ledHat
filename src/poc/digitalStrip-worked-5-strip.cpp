@@ -9,9 +9,6 @@
 //
 //void setup() {
 //	FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);
-//	int ledsPerStrip = NUM_LEDS / 2;
-////	FastLED.addLeds<WS2812B, D5, GRB>(leds, 0, ledsPerStrip);
-////	FastLED.addLeds<WS2812B, D6, GRB>(leds, ledsPerStrip, ledsPerStrip);
 //
 //	FastLED.addLeds<WS2812B, D5, GRB>(leds, NUM_LEDS);
 //}
@@ -27,7 +24,7 @@
 //
 //		// now, let's first 20 leds to the top 20 leds,
 //    leds(NUM_LEDS/2,NUM_LEDS-1) = leds(NUM_LEDS/2 - 1 ,0);
-//		FastLED.delay(20);
+//		FastLED.delay(200);
 //	}
 //}
 //

@@ -5,7 +5,7 @@
 //#include <ESP8266WiFi.h>
 //#include <ESP8266mDNS.h>
 //#include <ArduinoOTA.h>
-//#include "WifiCredentials.h"
+//#include "../settings/WifiCredentials.h"
 //
 //void setup() {
 //  Serial.begin(9600);
