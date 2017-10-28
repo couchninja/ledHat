@@ -12,13 +12,21 @@ OtaManager * otaManager;
 LedManager * ledManager;
 AccelManager * accelManager;
 
+// Doesn't work with every pin; maybe because of pull-up resistor
+#define BUTTON_PIN D3
+
+#define MS_PER_LED_UPDATE 20
+#define MS_PER_OTA_CHECK 50
+
+// read serial output with: platformio -f -c eclipse device monitor --baud 9600
+#define BAUDRATE 9600
+
 long lastLedStep = 0;
 long lastOtaCheck = 0;
-long msPerLedFrame = 20;
-long msPerOtaCheck = 50;
+bool buttonWasDown = false;
 
 void setup() {
-	Serial.begin(9600);
+	Serial.begin(BAUDRATE);
 	Serial.println("Booting");
 
 	otaManager = new OtaManager();
@@ -27,22 +35,36 @@ void setup() {
 
 	pinMode(2, OUTPUT);
 
+	pinMode(BUTTON_PIN, INPUT);
+}
+
+void checkButton(){
+	bool buttonIsDown = !digitalRead(BUTTON_PIN);
+		if(!buttonIsDown && buttonWasDown){
+			Serial.println("Button pushed");
+			ledManager->nextMode();
+		}
+		buttonWasDown = buttonIsDown;
+
+	  digitalWrite(BUILTIN_LED, buttonIsDown);
 }
 
 void loop() {
-	digitalWrite(2, LOW);
+	checkButton();
+
 	long now = millis();
 
 	accelManager->step();
 
-	if (now - lastOtaCheck > msPerOtaCheck) {
+	if (now - lastOtaCheck > MS_PER_OTA_CHECK) {
 		otaManager->check();
 		lastOtaCheck = now;
 	}
 
 	// this does not catch up if missing a frame
-	if (now - lastLedStep > msPerLedFrame) {
+	if (now - lastLedStep > MS_PER_OTA_CHECK) {
 		ledManager->step(accelManager);
 		lastLedStep = now;
 	}
 }
+

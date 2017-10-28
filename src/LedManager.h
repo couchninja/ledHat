@@ -15,6 +15,7 @@ class LedManager {
 public:
 	LedManager();
 	void step(AccelManager * accelManager);
+	void nextMode();
 	virtual ~LedManager();
 };
 

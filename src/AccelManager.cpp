@@ -39,23 +39,26 @@ MPU6050 mpu;
  * is present in this case). Could be quite handy in some cases.
  */
 //#define OUTPUT_READABLE_WORLDACCEL
-
 // USE WITH WEMOS:
 // int -> D5
 // SCA -> D1
 // SDA -> D2
 // power & ground straight on Wemos, its 3.3V which is perfect
 #define INTERRUPT_PIN D5 // must be D5, is the only avaialble interrupt pin
-#define LED_PIN 2 // LED pin for Wemos
-bool blinkState = false;
 
 // MPU control/status vars
-bool dmpReady = false;  // set true if DMP init was successful
-uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
-uint8_t devStatus; // return status after each device operation (0 = success, !0 = error)
-uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
-uint16_t fifoCount;     // count of all bytes currently in FIFO
-uint8_t fifoBuffer[64]; // FIFO storage buffer
+// set true if DMP init was successful
+bool dmpReady = false;
+// holds actual interrupt status byte from MPU
+uint8_t mpuIntStatus;
+// return status after each device operation (0 = success, !0 = error)
+uint8_t devStatus;
+// expected DMP packet size (default is 42 bytes)
+uint16_t packetSize;
+// count of all bytes currently in FIFO
+uint16_t fifoCount;
+// FIFO storage buffer
+uint8_t fifoBuffer[64];
 
 // ================================================================
 // ===               INTERRUPT DETECTION ROUTINE                ===
@@ -143,9 +146,6 @@ AccelManager::AccelManager() {
 		Serial.print(devStatus);
 		Serial.println(F(")"));
 	}
-
-	// configure LED for output
-	pinMode(LED_PIN, OUTPUT);
 }
 
 // ================================================================
@@ -160,15 +160,9 @@ void AccelManager::step() {
 	// wait for MPU interrupt or extra packet(s) available
 	while (!mpuInterrupt && fifoCount < packetSize) {
 		// other program behavior stuff here
-		// .
-		// .
-		// .
 		// if you are really paranoid you can frequently test in between other
 		// stuff to see if mpuInterrupt is true, and if so, "break;" from the
 		// while() loop to immediately process the MPU data
-		// .
-		// .
-		// .
 	}
 
 	// reset interrupt flag and get INT_STATUS byte
@@ -257,14 +251,9 @@ void AccelManager::step() {
 		Serial.print("\t");
 		Serial.println(aaWorld.z);
 #endif
-
-		// blink LED to indicate activity
-		blinkState = !blinkState;
-		digitalWrite(LED_PIN, blinkState);
 	}
 }
 
 AccelManager::~AccelManager() {
-	// TODO Auto-generated destructor stub
 }
 

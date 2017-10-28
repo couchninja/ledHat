@@ -42,6 +42,5 @@ void OtaManager::check(){
 }
 
 OtaManager::~OtaManager() {
-	// TODO Auto-generated destructor stub
 }
 
