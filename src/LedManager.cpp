@@ -7,19 +7,20 @@ LedManager::LedManager() {
 	FastLED.addLeds<WS2812B, D6, GRB>(leds, NUM_LEDS);
 }
 
-void LedManager::step() {
+void LedManager::step(AccelManager * accelManager) {
 	static uint8_t hue;
 	static uint8_t i;
 
 	leds.fadeToBlackBy(80);    // fade everything out
-	leds[i] = CHSV(hue++, 255, 255);
+	float pitch = accelManager->ypr[1];
+	leds[(int) abs(pitch*10)] = CHSV(hue++, 255, 255);
 	i++;
 	if (i >= NUM_LEDS) {
 		i = 0;
 	}
 	// now, let's first 20 leds to the top 20 leds,
 	//leds(NUM_LEDS/2,NUM_LEDS-1) = leds(NUM_LEDS/2 - 1 ,0);
-	FastLED.delay(50);
+//	FastLED.delay(50);
 	FastLED.show();
 }
 

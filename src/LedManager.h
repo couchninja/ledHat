@@ -8,11 +8,12 @@
 // - https://github.com/FastLED/FastLED/issues/337
 #define FASTLED_ALLOW_INTERRUPTS 0
 #include<FastLED.h>
+#include<AccelManager.h>
 
 class LedManager {
 public:
 	LedManager();
-	void step();
+	void step(AccelManager * accelManager);
 	virtual ~LedManager();
 };
 
