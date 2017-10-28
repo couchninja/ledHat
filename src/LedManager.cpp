@@ -12,10 +12,12 @@ void LedManager::step(AccelManager * accelManager) {
 	static uint8_t hue;
 	static uint8_t i;
 
-	leds.fadeToBlackBy(80);    // fade everything out
+	leds.fadeToBlackBy(80);
 	float pitch = accelManager->ypr[1];
-//	float pitch = 2;
-	i = (pitch * 30);
+	i = pitch * 30;
+//	float acc = accelManager->aaReal.z;
+//	i = acc / 1000;
+
 	i %= NUM_LEDS;
 
 	leds[i] = CHSV(hue++, 255, 255);
