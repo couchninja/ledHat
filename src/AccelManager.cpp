@@ -41,7 +41,7 @@ MPU6050 mpu;
 //#define OUTPUT_READABLE_WORLDACCEL
 // USE WITH WEMOS:
 // int -> D5
-// SCA -> D1
+// SCL -> D1
 // SDA -> D2
 // power & ground straight on Wemos, its 3.3V which is perfect
 #define INTERRUPT_PIN D5 // must be D5, is the only avaialble interrupt pin

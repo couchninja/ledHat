@@ -19,20 +19,21 @@ void LedManager::step(AccelManager * accelManager) {
 
 		leds.fadeToBlackBy(80);
 		leds.blur1d(64);
+
 		float pitch = accelManager->ypr[1];
 		i = pitch * 30;
+		i %= NUM_LEDS;
+		leds[i] = CHSV(hue++, 255, 255);
+
 //	float acc = accelManager->aaReal.z;
 //	i = acc / 1000;
 
-		i %= NUM_LEDS;
-
-//	leds[i] = CHSV(hue++, 255, 255);
-
-		static uint8_t j;
-		leds.fill_rainbow(i);
+//		static uint8_t j;
+//		j += 10;
+//		leds.fill_rainbow(j);
 	} else {
-		leds.blur1d(64);
-//		leds.fill_solid(CHSV(255, 255, 255));
+//		leds.blur1d(64);
+		leds.fill_solid(CHSV(255, 255, 255));
 	}
 
 	FastLED.show();
