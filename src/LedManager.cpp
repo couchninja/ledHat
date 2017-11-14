@@ -30,14 +30,9 @@ void LedManager::step(AccelManager * accelManager) {
 		leds.fadeToBlackBy(80);
 		leds.blur1d(64);
 
-		// from 0 to 1
+		// normalize to 0 ... 1 (not sure about inclusive/exclusive)
 		float pitchNormalized = (accelManager->ypr[1] + M_PI / 2) / (M_PI);
-//		Serial.print("normalized: ");
-//		Serial.println(pitchNormalized);
-
 		offset = pitchNormalized * LEDS_PER_STRIP;
-//		Serial.print("offset: ");
-//		Serial.println(offset);
 
 		offset %= LEDS_PER_STRIP;
 

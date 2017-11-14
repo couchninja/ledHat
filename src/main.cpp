@@ -18,8 +18,8 @@ AccelManager * accelManager;
 #define MS_PER_LED_UPDATE 20
 #define MS_PER_OTA_CHECK 50
 
-// read serial output with: platformio -f -c eclipse device monitor --baud 74880
-#define BAUDRATE 74880
+// read serial output with: platformio -f -c eclipse device monitor --baud 9600
+#define BAUDRATE 9600
 
 long lastLedStep = 0;
 long lastOtaCheck = 0;
@@ -48,7 +48,7 @@ void setup() {
 	while(!digitalRead(BUTTON_PIN)) {
 		Serial.println("Button down at boot: check for updates");
 		otaManager->check();
-		delay(20);
+		delay(500);
 		checkButton();
 	}
 
