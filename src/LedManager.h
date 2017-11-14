@@ -13,7 +13,7 @@
 
 class LedManager {
 public:
-	LedManager();
+	LedManager(bool wifiConnected);
 	void step(AccelManager * accelManager);
 	void nextMode();
 	virtual ~LedManager();

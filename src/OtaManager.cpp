@@ -5,10 +5,13 @@ OtaManager::OtaManager() {
 	WiFi.mode(WIFI_STA);
 	WiFi.begin(WifiCredentials::ssid, WifiCredentials::password);
 	while (WiFi.waitForConnectResult() != WL_CONNECTED) {
-		Serial.println("Connection Failed! Rebooting...");
-		delay(5000);
-		ESP.restart();
+		Serial.println("Connection Failed!");
+//		delay(5000);
+//		ESP.restart();
+		return;
 	}
+
+	connected = true;
 
 	ArduinoOTA.onStart([]() {
 		Serial.println("Start updating ");
@@ -31,10 +34,6 @@ OtaManager::OtaManager() {
 	Serial.println("Ready");
 	Serial.print("IP address: ");
 	Serial.println(WiFi.localIP());
-}
-
-void OtaManager::updateStarting(){
-	Serial.println("Start updating yay");
 }
 
 void OtaManager::check(){

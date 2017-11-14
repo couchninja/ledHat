@@ -18,35 +18,43 @@ AccelManager * accelManager;
 #define MS_PER_LED_UPDATE 20
 #define MS_PER_OTA_CHECK 50
 
-// read serial output with: platformio -f -c eclipse device monitor --baud 9600
-#define BAUDRATE 9600
+// read serial output with: platformio -f -c eclipse device monitor --baud 74880
+#define BAUDRATE 74880
 
 long lastLedStep = 0;
 long lastOtaCheck = 0;
+bool buttonIsDown = false;
 bool buttonWasDown = false;
+
+void checkButton(){
+	buttonIsDown = !digitalRead(BUTTON_PIN);
+	if(!buttonIsDown && buttonWasDown){
+		Serial.println("Button pushed");
+		ledManager->nextMode();
+	}
+	buttonWasDown = buttonIsDown;
+
+	digitalWrite(BUILTIN_LED, buttonIsDown);
+}
 
 void setup() {
 	Serial.begin(BAUDRATE);
 	Serial.println("Booting");
+	pinMode(2, OUTPUT);
+	pinMode(BUTTON_PIN, INPUT);
 
 	otaManager = new OtaManager();
-	ledManager = new LedManager();
+	// havent seen this work yet but maybe the button wiring is broken
+	while(!digitalRead(BUTTON_PIN)) {
+		Serial.println("Button down at boot: check for updates");
+		otaManager->check();
+		delay(20);
+		checkButton();
+	}
+
+	ledManager = new LedManager(otaManager->connected);
+
 	accelManager = new AccelManager();
-
-	pinMode(2, OUTPUT);
-
-	pinMode(BUTTON_PIN, INPUT);
-}
-
-void checkButton(){
-	bool buttonIsDown = !digitalRead(BUTTON_PIN);
-		if(!buttonIsDown && buttonWasDown){
-			Serial.println("Button pushed");
-			ledManager->nextMode();
-		}
-		buttonWasDown = buttonIsDown;
-
-	  digitalWrite(BUILTIN_LED, buttonIsDown);
 }
 
 void loop() {

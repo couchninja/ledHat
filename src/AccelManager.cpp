@@ -83,12 +83,6 @@ AccelManager::AccelManager() {
 			Fastwire::setup(400, true);
 #endif
 
-	// initialize serial communication
-	// ARON needed?
-	//	Serial.begin(9600);
-//	while (!Serial)
-//		; // wait for Leonardo enumeration, others continue immediately
-
 	// initialize device
 	Serial.println(F("Initializing I2C devices..."));
 	mpu.initialize();
@@ -100,14 +94,9 @@ AccelManager::AccelManager() {
 			mpu.testConnection() ?
 					F("MPU6050 connection successful") : F("MPU6050 connection failed"));
 
-	// wait for ready
-//	Serial.println(F("\nSend any character to begin DMP programming and demo: "));
-//	while (Serial.available() && Serial.read())
-//		; // empty buffer
-//	while (!Serial.available())
-//		;                 // wait for data
-//	while (Serial.available() && Serial.read())
-//		; // empty buffer again
+	// not sure if this is needed
+	while (Serial.available() && Serial.read())
+		; // empty buffer
 
 	// load and configure the DMP
 	Serial.println(F("Initializing DMP..."));
@@ -117,7 +106,7 @@ AccelManager::AccelManager() {
 	mpu.setXGyroOffset(220);
 	mpu.setYGyroOffset(76);
 	mpu.setZGyroOffset(-85);
-	mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
+	mpu.setZAccelOffset(1788);
 
 	// make sure it worked (returns 0 if so)
 	if (devStatus == 0) {
@@ -137,6 +126,7 @@ AccelManager::AccelManager() {
 
 		// get expected DMP packet size for later comparison
 		packetSize = mpu.dmpGetFIFOPacketSize();
+		Serial.println(F("Interrupt received"));
 	} else {
 		// ERROR!
 		// 1 = initial memory load failed
@@ -222,13 +212,13 @@ void AccelManager::step() {
 #endif
 
 #ifdef OUTPUT_READABLE_YAWPITCHROLL
-		// display Euler angles in degrees
+		// display Euler angles in rads
 		Serial.print("ypr\t");
-		Serial.print(ypr[0] * 180 / M_PI);
+		Serial.print(ypr[0]);
 		Serial.print("\t");
-		Serial.print(ypr[1] * 180 / M_PI);
+		Serial.print(ypr[1]);
 		Serial.print("\t");
-		Serial.println(ypr[2] * 180 / M_PI);
+		Serial.println(ypr[2]);
 #endif
 
 #ifdef OUTPUT_READABLE_REALACCEL

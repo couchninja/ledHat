@@ -10,9 +10,9 @@
 
 class OtaManager {
 public:
+	bool connected = false;
 	OtaManager();
 	void check();
-	void updateStarting();
 	virtual ~OtaManager();
 };
 
