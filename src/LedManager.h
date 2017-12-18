@@ -14,6 +14,11 @@
 class LedManager {
 public:
 	LedManager(bool wifiConnected);
+	void surfaceStep(AccelManager * accelManager);
+	void rainbowStep(AccelManager * accelManager);
+	void movingDotStep(AccelManager * accelManager);
+	void lightPixel(uint8_t rIndex, float y);
+	void fillRed(AccelManager * accelManager);
 	void step(AccelManager * accelManager);
 	void nextMode();
 	virtual ~LedManager();

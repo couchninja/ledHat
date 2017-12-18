@@ -1,8 +1,8 @@
 #include <AccelManager.h>
 
 /**
- * When moving this to header file, it will cause linker errors when the parent header file is used more than once.
- * Not sure why.
+ * When moving this to header file, it will cause linker errors when the
+ * parent header file is used more than once. Not sure why.
  */
 #include "MPU6050_6Axis_MotionApps20.h"
 
@@ -30,7 +30,7 @@ MPU6050 mpu;
  * components with gravity removed. This acceleration reference frame is
  * not compensated for orientation, so +X is always +X according to the
  * sensor, just without the effects of gravity. If you want acceleration
- * compensated for orientation, us OUTPUT_READABLE_WORLDACCEL instead.
+ * compensated for orientation, use OUTPUT_READABLE_WORLDACCEL instead.
  */
 //#define OUTPUT_READABLE_REALACCEL
 /* uncomment "OUTPUT_READABLE_WORLDACCEL" if you want to see acceleration
@@ -43,8 +43,9 @@ MPU6050 mpu;
 // int -> D5
 // SCL -> D1
 // SDA -> D2
-// power & ground straight on Wemos, its 3.3V which is perfect
-#define INTERRUPT_PIN D5 // must be D5, is the only avaialble interrupt pin
+// power & ground straight on Wemos, its slightly less than 5V which is perfect
+// must be D5, is the only avaialble interrupt pin on wemos D1
+#define INTERRUPT_PIN D5
 
 // MPU control/status vars
 // set true if DMP init was successful
