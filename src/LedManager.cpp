@@ -23,14 +23,68 @@ LedManager::LedManager(bool wifiConnected) {
 	delay(200);
 }
 
+/**
+ * Random reboots on horizon test mode, why?
+ * - extensive logging is off
+ * - seems to happen when tipping over but not always
+ * -- divide by zero? -> i dont, but maybe lib -> but other modes also use the same code accel and no probs
+ * -- loose contact? -> shaking doesnt crash it
+ * -- cpu overheat? -> running long is not a problem
+ * -- out of array? (but fastled seems to guard for this)
+ * - seems to trigger several times in a while...
+ * TODO: connect with serial
+ */
+void LedManager::horizonStep(AccelManager * accelManager) {
+	leds.fadeToBlackBy(80);
+	leds.blur1d(64);
+
+	// from -1 (backside down) to +1 (frontside down)
+	float pitchNormalized = (accelManager->ypr[1]) / (M_PI * 0.5);
+
+//	Serial.print("pitch: ");
+//	Serial.println(pitchNormalized);
+
+	float yAvgIndex = 2;
+	CHSV c = CHSV(50, 255, 255);
+
+	// 0 = back, 36*25 = right. 36*0.5 = front, 36*0.75 = left, 36*1 is back again
+
+	// In # of strips.
+	float backStripHeight = -pitchNormalized * NUM_OF_STRIPS;
+
+	float backY = yAvgIndex + backStripHeight;
+	setPixelFromBottomF(0, backY, c);
+	setPixelFromBottomF(LEDS_PER_STRIP - 1, backY, c);
+
+	// In # of strips.
+	float frontStripHeight = pitchNormalized * NUM_OF_STRIPS;
+	setPixelFromBottomF((LEDS_PER_STRIP - 1) * 0.5, yAvgIndex + frontStripHeight,
+			c);
+
+	// -1 (right down) to +1 (left down)
+	float rollNormalized = (accelManager->ypr[2]) / (M_PI * 0.5);
+
+	// In # of strips.
+	float leftStripHeight = -rollNormalized * NUM_OF_STRIPS;
+	setPixelFromBottomF((LEDS_PER_STRIP - 1) * 0.25, yAvgIndex + leftStripHeight,
+			c);
+
+	// In # of strips.
+	float rightStripHeight = rollNormalized * NUM_OF_STRIPS;
+	setPixelFromBottomF((LEDS_PER_STRIP - 1) * 0.75, yAvgIndex + rightStripHeight,
+			c);
+}
+
 void LedManager::surfaceStep(AccelManager * accelManager) {
 	leds.fadeToBlackBy(80);
 	leds.blur1d(64);
 
 	// from -1 (backside down) to +1 (frontside down)
 	float pitchNormalized = (accelManager->ypr[1]) / (M_PI * 0.5);
-	Serial.print("pitch: ");
-	Serial.println(pitchNormalized);
+//	Serial.print("pitch: ");
+//	Serial.println(pitchNormalized);
+
+	CHSV c = CHSV(50, 255, 255);
 
 	// 0 = back, 36*25 = right. 36*0.5 = front, 36*0.75 = left, 36*1 is back again
 
@@ -38,14 +92,14 @@ void LedManager::surfaceStep(AccelManager * accelManager) {
 	float backStripHeight = max(-pitchNormalized, 0) * NUM_OF_STRIPS;
 
 	for (uint8_t i = 0; i < backStripHeight; i++) {
-		lightPixel(0, i);
-		lightPixel(LEDS_PER_STRIP - 1, i);
+		setPixelFromBottom(0, i, c);
+		setPixelFromBottom(LEDS_PER_STRIP - 1, i, c);
 	}
 
 	// In # of strips.
 	float frontStripHeight = max(pitchNormalized, 0) * NUM_OF_STRIPS;
 	for (uint8_t i = 0; i < frontStripHeight; i++) {
-		lightPixel((LEDS_PER_STRIP - 1) * 0.5, i);
+		setPixelFromBottom((LEDS_PER_STRIP - 1) * 0.5, i, c);
 	}
 
 	// -1 (right down) to +1 (left down)
@@ -56,13 +110,13 @@ void LedManager::surfaceStep(AccelManager * accelManager) {
 	// In # of strips.
 	float leftStripHeight = max(-rollNormalized, 0) * NUM_OF_STRIPS;
 	for (uint8_t i = 0; i < leftStripHeight; i++) {
-		lightPixel((LEDS_PER_STRIP - 1) * 0.75, i);
+		setPixelFromBottom((LEDS_PER_STRIP - 1) * 0.25, i, c);
 	}
 
 	// In # of strips.
 	float rightStripHeight = max(rollNormalized, 0) * NUM_OF_STRIPS;
 	for (uint8_t i = 0; i < rightStripHeight; i++) {
-		lightPixel((LEDS_PER_STRIP - 1) * 0.25, i);
+		setPixelFromBottom((LEDS_PER_STRIP - 1) * 0.75, i, c);
 	}
 }
 
@@ -93,24 +147,58 @@ void LedManager::movingDotStep(AccelManager * accelManager) {
 }
 
 /**
- * ARON todo: swap coordinates
+ * r: radial index [0, LEDS_PER_STRIP> clockwise
+ * y: vertical index [0, NUM_OF_STRIPS> from top to bottom
+ */
+void LedManager::setPixel(uint8_t rIndex, uint8_t y, CHSV chsv) {
+	uint8_t yFromTop = NUM_OF_STRIPS - y - 1;
+	setPixelFromBottom(rIndex, yFromTop, chsv);
+}
+
+/**
+ * Resilient agains out-of-bounds coordinates (thanks to fastLed)
  * r: radial index [0, LEDS_PER_STRIP> clockwise
  * y: vertical index [0, NUM_OF_STRIPS> from bottom to top
  */
-void LedManager::lightPixel(uint8_t r, float y) {
-	uint8_t rCounterClock = LEDS_PER_STRIP - r;
-	leds[y * LEDS_PER_STRIP + rCounterClock] = CHSV(255, 255, 255);
+void LedManager::setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv) {
+	uint8_t rCounterClock = LEDS_PER_STRIP - rIndex - 1;
+
+	leds[y * LEDS_PER_STRIP + rCounterClock] = chsv;
+}
+
+/**
+ * Resilient agains out-of-bounds coordinates (thanks to fastLed)
+ * r: radial index [0, LEDS_PER_STRIP> clockwise
+ * y: vertical index [0, NUM_OF_STRIPS> from bottom to top
+ */
+void LedManager::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
+	float rCounterClock = LEDS_PER_STRIP - rIndex - 1;
+
+	uint8_t yBott = (uint8_t) y;
+	uint8_t yTop = yBott + 1;
+
+	float topPart = y - yBott;
+	float bottomPart = 1.0 - topPart;
+	// clamping should not be needed but ill keep this here for now
+	leds[clamp(yBott * LEDS_PER_STRIP + rCounterClock)].setHSV(chsv.h, chsv.s,
+			chsv.v * bottomPart);
+	leds[clamp(yTop * LEDS_PER_STRIP + rCounterClock)].setHSV(chsv.h, chsv.s,
+			chsv.v * topPart);
+}
+
+uint8_t LedManager::clamp(uint8_t ledCoord) {
+	return min(max(ledCoord, 0), NUM_LEDS*NUM_OF_STRIPS-1);
 }
 
 void LedManager::fillRed(AccelManager * accelManager) {
-	// red
+// red
 	leds.fill_solid(CHSV(255, 255, 20));
 }
 
 void LedManager::step(AccelManager * accelManager) {
 	switch (mode) {
 	case 0:
-		surfaceStep(accelManager);
+		horizonStep(accelManager);
 		break;
 	case 1:
 		movingDotStep(accelManager);

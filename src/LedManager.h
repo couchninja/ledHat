@@ -14,10 +14,14 @@
 class LedManager {
 public:
 	LedManager(bool wifiConnected);
+	void horizonStep(AccelManager * accelManager);
 	void surfaceStep(AccelManager * accelManager);
 	void rainbowStep(AccelManager * accelManager);
 	void movingDotStep(AccelManager * accelManager);
-	void lightPixel(uint8_t rIndex, float y);
+	void setPixel(uint8_t rIndex, uint8_t y, CHSV chsv);
+	void setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv);
+	void setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv);
+	uint8_t clamp(uint8_t ledCoord);
 	void fillRed(AccelManager * accelManager);
 	void step(AccelManager * accelManager);
 	void nextMode();
