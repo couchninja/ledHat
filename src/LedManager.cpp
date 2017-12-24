@@ -76,51 +76,6 @@ void LedManager::horizonStep(AccelManager * accelManager) {
 			c);
 }
 
-void LedManager::surfaceStep(AccelManager * accelManager) {
-	leds.fadeToBlackBy(80);
-	leds.blur1d(64);
-
-	// from -1 (backside down) to +1 (frontside down)
-	float pitchNormalized = (accelManager->ypr[1]) / (M_PI * 0.5);
-//	Serial.print("pitch: ");
-//	Serial.println(pitchNormalized);
-
-	CHSV c = CHSV(50, 255, 255);
-
-	// 0 = back, 36*25 = right. 36*0.5 = front, 36*0.75 = left, 36*1 is back again
-
-	// In # of strips.
-	float backStripHeight = max(-pitchNormalized, 0) * NUM_OF_STRIPS;
-
-	for (uint8_t i = 0; i < backStripHeight; i++) {
-		setPixelFromBottom(0, i, c);
-		setPixelFromBottom(LEDS_PER_STRIP - 1, i, c);
-	}
-
-	// In # of strips.
-	float frontStripHeight = max(pitchNormalized, 0) * NUM_OF_STRIPS;
-	for (uint8_t i = 0; i < frontStripHeight; i++) {
-		setPixelFromBottom((LEDS_PER_STRIP - 1) * 0.5, i, c);
-	}
-
-	// -1 (right down) to +1 (left down)
-	float rollNormalized = (accelManager->ypr[2]) / (M_PI * 0.5);
-	Serial.print("roll: ");
-	Serial.println(rollNormalized);
-
-	// In # of strips.
-	float leftStripHeight = max(-rollNormalized, 0) * NUM_OF_STRIPS;
-	for (uint8_t i = 0; i < leftStripHeight; i++) {
-		setPixelFromBottom((LEDS_PER_STRIP - 1) * 0.25, i, c);
-	}
-
-	// In # of strips.
-	float rightStripHeight = max(rollNormalized, 0) * NUM_OF_STRIPS;
-	for (uint8_t i = 0; i < rightStripHeight; i++) {
-		setPixelFromBottom((LEDS_PER_STRIP - 1) * 0.75, i, c);
-	}
-}
-
 void LedManager::rainbowStep(AccelManager * accelManager) {
 	static uint8_t j = 0;
 	j += 10;
