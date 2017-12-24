@@ -27,22 +27,23 @@ LedManager::LedManager(bool wifiConnected) {
  * Random reboots on horizon test mode, why?
  * - extensive logging is off
  * - seems to happen when tipping over but not always
- * -- divide by zero? -> i dont, but maybe lib -> but other modes also use the same code accel and no probs
+ * -- divide by zero? -> i dont, but maybe lib -> but movingDotStep also use the same code accel and no probs
  * -- loose contact? -> shaking doesnt crash it
  * -- cpu overheat? -> running long is not a problem
  * -- out of array? (but fastled seems to guard for this)
  * - seems to trigger several times in a while...
- * TODO: connect with serial
+ *
+ * Hokey! After all the testing, the leds turned off uless you squeeze the contacts from the side
+ * Hopefully this is all because of loose contacts (would explain mode switching also).
+ * If problem still occurs -> comment out code in setPixelFromBottomF and see what happens.
+ * call rainbow mode as graphical debug.
+ * Did problem also occur with setPixelFromBottom? cant remember.
  */
 void LedManager::horizonStep(AccelManager * accelManager) {
 	leds.fadeToBlackBy(80);
-	leds.blur1d(64);
 
 	// from -1 (backside down) to +1 (frontside down)
 	float pitchNormalized = (accelManager->ypr[1]) / (M_PI * 0.5);
-
-//	Serial.print("pitch: ");
-//	Serial.println(pitchNormalized);
 
 	float yAvgIndex = 2;
 	CHSV c = CHSV(50, 255, 255);
@@ -179,15 +180,17 @@ void LedManager::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
 
 	float topPart = y - yBott;
 	float bottomPart = 1.0 - topPart;
-	// clamping should not be needed but ill keep this here for now
+
+	// clamping is needed for safety since we set chsv directly
 	leds[clamp(yBott * LEDS_PER_STRIP + rCounterClock)].setHSV(chsv.h, chsv.s,
 			chsv.v * bottomPart);
+
 	leds[clamp(yTop * LEDS_PER_STRIP + rCounterClock)].setHSV(chsv.h, chsv.s,
 			chsv.v * topPart);
 }
 
 uint8_t LedManager::clamp(uint8_t ledCoord) {
-	return min(max(ledCoord, 0), NUM_LEDS*NUM_OF_STRIPS-1);
+	return min(max(ledCoord, 0), NUM_LEDS-1);
 }
 
 void LedManager::fillRed(AccelManager * accelManager) {
