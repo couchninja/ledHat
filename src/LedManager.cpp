@@ -23,22 +23,6 @@ LedManager::LedManager(bool wifiConnected) {
 	delay(200);
 }
 
-/**
- * Random reboots on horizon test mode, why?
- * - extensive logging is off
- * - seems to happen when tipping over but not always
- * -- divide by zero? -> i dont, but maybe lib -> but movingDotStep also use the same code accel and no probs
- * -- loose contact? -> shaking doesnt crash it
- * -- cpu overheat? -> running long is not a problem
- * -- out of array? (but fastled seems to guard for this)
- * - seems to trigger several times in a while...
- *
- * Hokey! After all the testing, the leds turned off uless you squeeze the contacts from the side
- * Hopefully this is all because of loose contacts (would explain mode switching also).
- * If problem still occurs -> comment out code in setPixelFromBottomF and see what happens.
- * call rainbow mode as graphical debug.
- * Did problem also occur with setPixelFromBottom? cant remember.
- */
 void LedManager::horizonStep(AccelManager * accelManager) {
 	leds.fadeToBlackBy(80);
 
