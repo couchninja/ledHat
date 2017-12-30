@@ -1,7 +1,7 @@
 #include <LedManager.h>
 
 #define LEDS_PER_STRIP 36
-#define NUM_OF_STRIPS 5
+#define NUM_OF_STRIPS 9
 #define NUM_LEDS NUM_OF_STRIPS*LEDS_PER_STRIP
 
 CRGBArray<NUM_LEDS> leds;
@@ -60,9 +60,19 @@ void LedManager::horizonStep(AccelManager * accelManager) {
 			c);
 }
 
-void LedManager::rainbowStep(AccelManager * accelManager) {
+void LedManager::rainbow1Step(AccelManager * accelManager) {
 	static uint8_t j = 0;
-	j += 10;
+	j += 2;
+	leds.fill_rainbow(j);
+}
+void LedManager::rainbow2Step(AccelManager * accelManager) {
+	static uint8_t j = 0;
+	j += 1;
+	leds.fill_rainbow(j);
+}
+void LedManager::rainbow3Step(AccelManager * accelManager) {
+	static uint8_t j = 0;
+	j += 4;
 	leds.fill_rainbow(j);
 }
 
@@ -140,13 +150,15 @@ void LedManager::fillRed(AccelManager * accelManager) {
 void LedManager::step(AccelManager * accelManager) {
 	switch (mode) {
 	case 0:
-		horizonStep(accelManager);
+//		horizonStep(accelManager);
+		rainbow1Step(accelManager);
 		break;
 	case 1:
-		movingDotStep(accelManager);
+//		movingDotStep(accelManager);
+		rainbow2Step(accelManager);
 		break;
 	case 2:
-		rainbowStep(accelManager);
+		rainbow3Step(accelManager);
 		break;
 	case 3:
 		fillRed(accelManager);

@@ -16,7 +16,9 @@ public:
 	LedManager(bool wifiConnected);
 	void horizonStep(AccelManager * accelManager);
 	void surfaceStep(AccelManager * accelManager);
-	void rainbowStep(AccelManager * accelManager);
+	void rainbow1Step(AccelManager * accelManager);
+	void rainbow2Step(AccelManager * accelManager);
+	void rainbow3Step(AccelManager * accelManager);
 	void movingDotStep(AccelManager * accelManager);
 	void setPixel(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv);
