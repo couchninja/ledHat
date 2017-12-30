@@ -10,6 +10,7 @@
 #define FASTLED_ALLOW_INTERRUPTS 0
 
 #include<FastLED.h>
+//#include<colorpalettes.h>
 
 class LedManager {
 public:
@@ -19,6 +20,7 @@ public:
 	void rainbow1Step(AccelManager * accelManager);
 	void rainbow2Step(AccelManager * accelManager);
 	void rainbow3Step(AccelManager * accelManager);
+	void fireStep(AccelManager * accelManager);
 	void movingDotStep(AccelManager * accelManager);
 	void setPixel(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv);
