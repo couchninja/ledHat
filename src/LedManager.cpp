@@ -63,10 +63,32 @@ void LedManager::horizonStep(AccelManager * accelManager) {
 			c);
 }
 
-void LedManager::rainbow1Step(AccelManager * accelManager) {
+void LedManager::rainbow1Step(float intensity) {
 	static uint8_t j = 0;
-	j += 2;
-	leds.fill_rainbow(j);
+	j += 4;
+//	Serial.print("intensity 	");
+//	Serial.println(intensity);
+
+//	leds.fill_rainbow(j);
+//	intensity = 0.01;
+	float invIntensity = 1.0 - intensity;
+//	leds.fadeToBlackBy(intensity * 255.0);
+
+	CHSV hsv;
+	hsv.hue = j;
+	hsv.val = 255;
+	hsv.sat = 240;
+	for( int i = 0; i < NUM_LEDS; i++) {
+		CRGB old = leds[i];
+		leds[i] = hsv;
+		leds[i].r = (float)leds[i].r * intensity + (float)old.r * invIntensity;
+		leds[i].g = (float)leds[i].g * intensity + (float)old.g * invIntensity;
+		leds[i].b = (float)leds[i].b * intensity + (float)old.b * invIntensity;
+
+//		leds[i] = old.lerp16(leds[i], 0.5);
+
+		hsv.hue += 2;
+	}
 }
 void LedManager::rainbow2Step(AccelManager * accelManager) {
 	static uint8_t j = 0;
@@ -165,7 +187,7 @@ void LedManager::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
 CRGBPalette16 gPal = HeatColors_p;
 bool gReverseDirection = false;
 
-void LedManager::fireStep(AccelManager * accelManager) {
+void LedManager::fireStep() {
 	// Array of temperature readings at each simulation cell
 	static byte heat[NUM_LEDS];
 	static int counter = 0;
@@ -210,13 +232,43 @@ void LedManager::fireStep(AccelManager * accelManager) {
 	}
 }
 
-uint8_t LedManager::clamp(uint8_t ledCoord) {
-	return min(max(ledCoord, 0), NUM_LEDS-1);
+void LedManager::fireRainbowTrans(){
+	static int frames = 0;
+
+	// in frames
+	int transFr = 100;
+
+	int stayFr = 100;
+
+	// fire, always
+	fireStep();
+
+	float intensity;
+	frames ++;
+	if(frames < transFr){
+		intensity = (float)frames / (float)transFr;
+	} else if (frames < transFr + stayFr) {
+		intensity = 1;
+	} else if(frames < transFr + stayFr + transFr) {
+		int inTransTime = frames - transFr - stayFr;
+		intensity = 1.0 - ((float) inTransTime / (float)transFr);
+	} else if(frames < transFr + stayFr + transFr + stayFr ) {
+		intensity = 0;
+	} else {
+		intensity = 0;
+		frames = 0;
+	}
+
+	rainbow1Step(intensity);
 }
 
-void LedManager::fillRed(AccelManager * accelManager) {
+void LedManager::fillRed() {
 // red
 	leds.fill_solid(CHSV(255, 255, 20));
+}
+
+uint8_t LedManager::clamp(uint8_t ledCoord) {
+	return min(max(ledCoord, 0), NUM_LEDS-1);
 }
 
 void LedManager::step(AccelManager * accelManager) {
@@ -224,7 +276,7 @@ void LedManager::step(AccelManager * accelManager) {
 	case 0:
 //		horizonStep(accelManager);
 //		fireStep(accelManager);
-		rainbow1Step(accelManager);
+		fireRainbowTrans();
 		break;
 	case 1:
 //		movingDotStep(accelManager);
@@ -235,7 +287,7 @@ void LedManager::step(AccelManager * accelManager) {
 		break;
 	case 3:
 //		fillRed(accelManager);
-		fireStep(accelManager);
+		fireStep();
 		break;
 	}
 

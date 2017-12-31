@@ -10,23 +10,23 @@
 #define FASTLED_ALLOW_INTERRUPTS 0
 
 #include<FastLED.h>
-//#include<colorpalettes.h>
 
 class LedManager {
 public:
 	LedManager(bool wifiConnected);
 	void horizonStep(AccelManager * accelManager);
 	void surfaceStep(AccelManager * accelManager);
-	void rainbow1Step(AccelManager * accelManager);
+	void rainbow1Step(float intensity);
 	void rainbow2Step(AccelManager * accelManager);
 	void rainbow3Step(AccelManager * accelManager);
-	void fireStep(AccelManager * accelManager);
+	void fireStep();
+	void fireRainbowTrans();
 	void movingDotStep(AccelManager * accelManager);
 	void setPixel(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv);
 	uint8_t clamp(uint8_t ledCoord);
-	void fillRed(AccelManager * accelManager);
+	void fillRed();
 	void step(AccelManager * accelManager);
 	void nextMode();
 	virtual ~LedManager();
