@@ -14,7 +14,7 @@ LedManager::LedManager(bool wifiConnected) {
 	// Add entropy to random number generator; we use a lot of it.
 //	random16_add_entropy( random());
 
-	FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);
+	FastLED.setMaxPowerInVoltsAndMilliamps(5, 1000);
 	FastLED.addLeds<WS2812B, D6, GRB>(leds, NUM_LEDS);
 
 	if (wifiConnected)
@@ -163,9 +163,6 @@ void LedManager::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
 			chsv.v * topPart);
 }
 
-// Fire2012 by Mark Kriegsman, July 2012
-// as part of "Five Elements" shown here: http://youtu.be/knWiGsmgycY
-////
 // This basic one-dimensional 'fire' simulation works roughly as follows:
 // There's a underlying array of 'heat' cells, that model the temperature
 // at each point along the line.  Every cycle through the simulation,
@@ -177,12 +174,12 @@ void LedManager::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
 //     The heat-to-color mapping uses a black-body radiation approximation.
 //
 // Temperature is in arbitrary units from 0 (cold black) to 255 (white hot).
-#define COOLING  0.05
+#define COOLING  0.5
 
 // SPARKING: What chance (out of 255) is there that a new spark will be lit?
 // Higher chance = more roaring fire.  Lower chance = more flickery fire.
 // Default 120, suggested range 50-200.
-#define SPARKING 120
+#define SPARKING 255
 
 CRGBPalette16 gPal = HeatColors_p;
 bool gReverseDirection = false;
@@ -212,15 +209,17 @@ void LedManager::fireStep() {
 
 	// Step 3.  Randomly ignite new 'sparks' of heat
 	if (random8() < SPARKING) {
-		int y = random16(NUM_LEDS);
+		int y = random16(NUM_LEDS/4);
 		heat[y] = qadd8(heat[y], random8(160, 255));
+		int y2 = random16(NUM_LEDS/8);
+		heat[y2] = qadd8(heat[y2], random8(160, 255));
 	}
 
 	// Step 4.  Map from heat cells to LED colors
 	for (int j = 0; j < NUM_LEDS; j++) {
 		// Scale the heat value from 0-255 down to 0-240
 		// for best results with color palettes.
-		byte colorindex = scale8(heat[j], 200);
+		byte colorindex = scale8(heat[j], 240);
 		CRGB color = ColorFromPalette(gPal, colorindex);
 		int pixelnumber;
 		if (gReverseDirection) {
@@ -230,15 +229,23 @@ void LedManager::fireStep() {
 		}
 		leds[pixelnumber] = color;
 	}
+
+	// Step 4.  Map from heat cells to LED colors
+	for (int j = 0; j < NUM_LEDS/2; j++) {
+		leds[NUM_LEDS - j - 1] = leds[j];
+	}
 }
 
 void LedManager::fireRainbowTrans(){
 	static int frames = 0;
 
 	// in frames
-	int transFr = 100;
+	int transFr = 200;
+	int stayFr = 2000;
 
-	int stayFr = 100;
+	// transition test values
+//	int transFr = 100;
+//	int stayFr = 100;
 
 	// fire, always
 	fireStep();
@@ -275,7 +282,7 @@ void LedManager::step(AccelManager * accelManager) {
 	switch (mode) {
 	case 0:
 //		horizonStep(accelManager);
-//		fireStep(accelManager);
+//		fireStep();
 		fireRainbowTrans();
 		break;
 	case 1:
