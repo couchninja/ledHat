@@ -281,16 +281,16 @@ uint8_t LedManager::clamp(uint8_t ledCoord) {
 void LedManager::step(AccelManager * accelManager) {
 	switch (mode) {
 	case 0:
-//		horizonStep(accelManager);
+		horizonStep(accelManager);
 //		fireStep();
-		fireRainbowTrans();
+//		fireRainbowTrans();
 		break;
 	case 1:
 //		movingDotStep(accelManager);
-		rainbow2Step(accelManager);
+		fireRainbowTrans();
 		break;
 	case 2:
-		rainbow3Step(accelManager);
+		rainbow2Step(accelManager);
 		break;
 	case 3:
 //		fillRed(accelManager);

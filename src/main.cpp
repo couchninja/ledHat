@@ -54,7 +54,7 @@ void setup() {
 
 	ledManager = new LedManager(otaManager->connected);
 
-//	accelManager = new AccelManager();
+	accelManager = new AccelManager();
 }
 
 void loop() {
