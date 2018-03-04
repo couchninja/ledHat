@@ -275,7 +275,7 @@ void LedManager::fillRed() {
 }
 
 uint8_t LedManager::clamp(uint8_t ledCoord) {
-	return min(max(ledCoord, 0), NUM_LEDS-1);
+	return _min(_max(ledCoord, 0), (NUM_LEDS-1));
 }
 
 void LedManager::step(AccelManager * accelManager) {

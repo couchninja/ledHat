@@ -1,0 +1,16 @@
+name: ledhat
+
+channels:
+ - conda-forge
+
+dependencies:
+ - python = 2.7.*
+ - python.app   # [osx]
+ - pip:
+   - platformio == 3.5.1
+
+# also install:
+# pio lib install "FastLED"
+# pio lib install "I2Cdevlib-MPU6050"
+# don't install "WiFi"!!!
+# they're installed outside in a general directory outside of this project.

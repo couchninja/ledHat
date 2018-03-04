@@ -83,7 +83,6 @@ AccelManager::AccelManager() {
 #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
 			Fastwire::setup(400, true);
 #endif
-
 	// initialize device
 	Serial.println(F("Initializing I2C devices..."));
 	mpu.initialize();
