@@ -303,8 +303,7 @@ void LedManager::step(AccelManager * accelManager) {
 
 void LedManager::nextMode() {
 	mode++;
-	mode %= NUM_MODES
-	;
+	mode %= NUM_MODES;
 }
 
 LedManager::~LedManager() {
