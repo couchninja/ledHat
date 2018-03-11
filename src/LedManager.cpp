@@ -250,12 +250,7 @@ void LedManager::step(AccelManager * accelManager) {
 	case 0:
 		horizonAnimation->step(accelManager);
 
-		for(int i = 0; i < 5*LEDS_PER_STRIP; i++) {
-			animleds[i] = horizonAnimation->animLeds[i];
-		}
-		// ARON ...maybe instead i should make a different kind of array for the other
-		// leds, on initialize it in a different way
-//		memmove(&horizonAnimation->animLeds[0], &animleds[0], NUM_LEDS * sizeof( CRGB));
+		memmove(&animleds[0], &horizonAnimation->animLeds[0], NUM_LEDS * sizeof( CRGB));
 //		fireStep();
 //		rainbow2Step(accelManager);
 //		fireRainbowTrans();
@@ -272,8 +267,6 @@ void LedManager::step(AccelManager * accelManager) {
 		fireStep();
 		break;
 	}
-
-	// ARON todo: copy leds of animation to here
 
 	FastLED.show();
 }
