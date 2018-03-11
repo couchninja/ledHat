@@ -9,7 +9,7 @@
 #define FASTLED_ALLOW_INTERRUPTS 0
 #include <FastLED.h>
 #include<AccelManager.h>
-//#include<animation/Animation.h>
+#include<animation/FireAnimation.h>
 #include<animation/HorizonAnimation.h>
 
 class LedManager {
@@ -19,8 +19,6 @@ public:
 	void rainbow1Step(float intensity);
 	void rainbow2Step(AccelManager * accelManager);
 	void rainbow3Step(AccelManager * accelManager);
-	void fireStep();
-	void fireRainbowTrans();
 	void movingDotStep(AccelManager * accelManager);
 	void setPixel(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv);

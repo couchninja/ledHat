@@ -1,7 +1,6 @@
 #ifndef SRC_ANIMATION_HORIZONANIMATION_H_
 #define SRC_ANIMATION_HORIZONANIMATION_H_
 
-#include <AccelManager.h>
 #include <animation/Animation.h>
 
 class HorizonAnimation: public Animation {
