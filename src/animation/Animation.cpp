@@ -4,7 +4,7 @@ Animation::Animation(int ledsPerStrip, int numOfStrips) {
 	this->ledsPerStrip = ledsPerStrip;
 	this->numOfStrips = numOfStrips;
 	numOfLeds = ledsPerStrip * numOfStrips;
-	animLeds = new CRGB[numOfLeds];
+	leds = new CRGB[numOfLeds];
 	finished = false;
 }
 
@@ -25,7 +25,7 @@ void Animation::setPixel(uint8_t rIndex, uint8_t y, CHSV chsv) {
 void Animation::setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv) {
 	uint8_t rCounterClock = ledsPerStrip - rIndex - 1;
 
-	animLeds[y * ledsPerStrip + rCounterClock] = chsv;
+	leds[y * ledsPerStrip + rCounterClock] = chsv;
 }
 
 /**
@@ -43,10 +43,10 @@ void Animation::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
 	float bottomPart = 1.0 - topPart;
 
 	// clamping is needed for safety since we set chsv directly
-	animLeds[clamp(yBott * ledsPerStrip + rCounterClock)].setHSV(chsv.h, chsv.s,
+	leds[clamp(yBott * ledsPerStrip + rCounterClock)].setHSV(chsv.h, chsv.s,
 			chsv.v * bottomPart);
 
-	animLeds[clamp(yTop * ledsPerStrip + rCounterClock)].setHSV(chsv.h, chsv.s,
+	leds[clamp(yTop * ledsPerStrip + rCounterClock)].setHSV(chsv.h, chsv.s,
 			chsv.v * topPart);
 }
 
@@ -55,6 +55,6 @@ uint8_t Animation::clamp(uint8_t ledCoord) {
 }
 
 Animation::~Animation() {
-	delete animLeds;
+	delete leds;
 }
 

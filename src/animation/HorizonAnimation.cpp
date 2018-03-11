@@ -6,7 +6,11 @@ HorizonAnimation::HorizonAnimation(int ledsPerStrip, int numOfStrips) :
 
 //void Animation::step(AccelManager * accelManager) {
 void HorizonAnimation::step(AccelManager * accelManager) {
-	animLeds->fadeToBlackBy(80);
+	// ARON fade doesnt seem to work. Maybe because its not a fixed size array,
+	// or maybe it has to be initialized like: CRGBArray<NUM_LEDS> leds;
+	// I can set the number of leds in a config file maybe and go back to declaration
+	// in the header.
+	leds->fadeToBlackBy(80);
 
 	// from -1 (backside down) to +1 (frontside down)
 	float pitchNormalized = (accelManager->ypr[1]) / (M_PI * 0.5);

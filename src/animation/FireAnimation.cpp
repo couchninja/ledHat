@@ -65,12 +65,12 @@ void FireAnimation::step(AccelManager * accelManager) {
 		} else {
 			pixelnumber = j;
 		}
-		animLeds[pixelnumber] = color;
+		leds[pixelnumber] = color;
 	}
 
 	// Step 4.  Map from heat cells to LED colors
 	for (int j = 0; j < numOfLeds/2; j++) {
-		animLeds[numOfLeds - j - 1] = animLeds[j];
+		leds[numOfLeds - j - 1] = leds[j];
 	}
 }
 

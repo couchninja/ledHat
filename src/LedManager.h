@@ -11,6 +11,7 @@
 #include<AccelManager.h>
 #include<animation/FireAnimation.h>
 #include<animation/HorizonAnimation.h>
+#include<animation/MovingDotAnimation.h>
 
 class LedManager {
 public:
@@ -19,11 +20,6 @@ public:
 	void rainbow1Step(float intensity);
 	void rainbow2Step(AccelManager * accelManager);
 	void rainbow3Step(AccelManager * accelManager);
-	void movingDotStep(AccelManager * accelManager);
-	void setPixel(uint8_t rIndex, uint8_t y, CHSV chsv);
-	void setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv);
-	void setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv);
-	uint8_t clamp(uint8_t ledCoord);
 	void fillRed();
 	void step(AccelManager * accelManager);
 	void nextMode();

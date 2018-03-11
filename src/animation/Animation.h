@@ -15,7 +15,7 @@ public:
 	int numOfStrips;
 	int numOfLeds;
 	Animation(int ledsPerStrip, int numOfStrips);
-	CRGB * animLeds;
+	CRGB * leds;
 	virtual void step(AccelManager * accelManager) = 0;
 	void setPixel(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv);
