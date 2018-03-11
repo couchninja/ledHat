@@ -5,7 +5,7 @@
 
 /**
  * NOTES
- * - Writing lots of values to serial will interfere with acceleromere working when com port is not connected
+ * - Writing lots of values to serial will interfere with accelerometer working when com port is not connected
  */
 
 OtaManager * otaManager;
@@ -52,6 +52,7 @@ void setup() {
 		checkButton();
 	}
 
+	// ARON new needed? is it different syntax?
 	ledManager = new LedManager(otaManager->connected);
 
 	accelManager = new AccelManager();

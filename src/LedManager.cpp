@@ -1,13 +1,17 @@
 #include <LedManager.h>
 
+// ARON deduplicate
 #define LEDS_PER_STRIP 36
-#define NUM_OF_STRIPS 9
+#define NUM_OF_STRIPS 5
 #define NUM_LEDS NUM_OF_STRIPS*LEDS_PER_STRIP
 
-CRGBArray<NUM_LEDS> leds;
+CRGBArray<NUM_LEDS> animleds;
 
 #define NUM_MODES 4;
 int mode = 0;
+
+// ARON new was needed... whats the difference?
+HorizonAnimation * horizonAnimation = new HorizonAnimation();
 
 LedManager::LedManager(bool wifiConnected) {
 	Serial.println("Initializing LedManager");
@@ -15,52 +19,15 @@ LedManager::LedManager(bool wifiConnected) {
 //	random16_add_entropy( random());
 
 	FastLED.setMaxPowerInVoltsAndMilliamps(5, 1000);
-	FastLED.addLeds<WS2812B, D6, GRB>(leds, NUM_LEDS);
+	FastLED.addLeds<WS2812B, D6, GRB>(animleds, NUM_LEDS);
 
 	if (wifiConnected)
-		leds.fill_solid(CHSV(100, 255, 100));
+		animleds.fill_solid(CHSV(100, 255, 100));
 	else
-		leds.fill_solid(CHSV(255, 255, 100));
+		animleds.fill_solid(CHSV(255, 255, 100));
 	FastLED.show();
 
 	delay(200);
-}
-
-void LedManager::horizonStep(AccelManager * accelManager) {
-	leds.fadeToBlackBy(80);
-
-	// from -1 (backside down) to +1 (frontside down)
-	float pitchNormalized = (accelManager->ypr[1]) / (M_PI * 0.5);
-
-	float yAvgIndex = 2;
-	CHSV c = CHSV(50, 255, 255);
-
-	// 0 = back, 36*25 = right. 36*0.5 = front, 36*0.75 = left, 36*1 is back again
-
-	// In # of strips.
-	float backStripHeight = -pitchNormalized * NUM_OF_STRIPS;
-
-	float backY = yAvgIndex + backStripHeight;
-	setPixelFromBottomF(0, backY, c);
-	setPixelFromBottomF(LEDS_PER_STRIP - 1, backY, c);
-
-	// In # of strips.
-	float frontStripHeight = pitchNormalized * NUM_OF_STRIPS;
-	setPixelFromBottomF((LEDS_PER_STRIP - 1) * 0.5, yAvgIndex + frontStripHeight,
-			c);
-
-	// -1 (right down) to +1 (left down)
-	float rollNormalized = (accelManager->ypr[2]) / (M_PI * 0.5);
-
-	// In # of strips.
-	float leftStripHeight = -rollNormalized * NUM_OF_STRIPS;
-	setPixelFromBottomF((LEDS_PER_STRIP - 1) * 0.25, yAvgIndex + leftStripHeight,
-			c);
-
-	// In # of strips.
-	float rightStripHeight = rollNormalized * NUM_OF_STRIPS;
-	setPixelFromBottomF((LEDS_PER_STRIP - 1) * 0.75, yAvgIndex + rightStripHeight,
-			c);
 }
 
 void LedManager::rainbow1Step(float intensity) {
@@ -79,11 +46,11 @@ void LedManager::rainbow1Step(float intensity) {
 	hsv.val = 255;
 	hsv.sat = 240;
 	for( int i = 0; i < NUM_LEDS; i++) {
-		CRGB old = leds[i];
-		leds[i] = hsv;
-		leds[i].r = (float)leds[i].r * intensity + (float)old.r * invIntensity;
-		leds[i].g = (float)leds[i].g * intensity + (float)old.g * invIntensity;
-		leds[i].b = (float)leds[i].b * intensity + (float)old.b * invIntensity;
+		CRGB old = animleds[i];
+		animleds[i] = hsv;
+		animleds[i].r = (float)animleds[i].r * intensity + (float)old.r * invIntensity;
+		animleds[i].g = (float)animleds[i].g * intensity + (float)old.g * invIntensity;
+		animleds[i].b = (float)animleds[i].b * intensity + (float)old.b * invIntensity;
 
 //		leds[i] = old.lerp16(leds[i], 0.5);
 
@@ -93,20 +60,20 @@ void LedManager::rainbow1Step(float intensity) {
 void LedManager::rainbow2Step(AccelManager * accelManager) {
 	static uint8_t j = 0;
 	j += 1;
-	leds.fill_rainbow(j);
+	animleds.fill_rainbow(j);
 }
 void LedManager::rainbow3Step(AccelManager * accelManager) {
 	static uint8_t j = 0;
 	j += 4;
-	leds.fill_rainbow(j);
+	animleds.fill_rainbow(j);
 }
 
 void LedManager::movingDotStep(AccelManager * accelManager) {
 	static uint8_t hue;
 	static uint8_t offset;
 
-	leds.fadeToBlackBy(80);
-	leds.blur1d(64);
+	animleds.fadeToBlackBy(80);
+	animleds.blur1d(64);
 
 	// normalize to 0 ... 1 (not sure about inclusive/exclusive)
 	float pitchNormalized = (accelManager->ypr[1] + M_PI / 2) / (M_PI);
@@ -115,7 +82,7 @@ void LedManager::movingDotStep(AccelManager * accelManager) {
 	offset %= LEDS_PER_STRIP;
 
 	for (uint8_t i = 0; i < NUM_OF_STRIPS; i++) {
-		leds[i * LEDS_PER_STRIP + offset] = CHSV(hue, 255, 255);
+		animleds[i * LEDS_PER_STRIP + offset] = CHSV(hue, 255, 255);
 	}
 
 	hue++;
@@ -138,7 +105,7 @@ void LedManager::setPixel(uint8_t rIndex, uint8_t y, CHSV chsv) {
 void LedManager::setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv) {
 	uint8_t rCounterClock = LEDS_PER_STRIP - rIndex - 1;
 
-	leds[y * LEDS_PER_STRIP + rCounterClock] = chsv;
+	animleds[y * LEDS_PER_STRIP + rCounterClock] = chsv;
 }
 
 /**
@@ -156,10 +123,10 @@ void LedManager::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
 	float bottomPart = 1.0 - topPart;
 
 	// clamping is needed for safety since we set chsv directly
-	leds[clamp(yBott * LEDS_PER_STRIP + rCounterClock)].setHSV(chsv.h, chsv.s,
+	animleds[clamp(yBott * LEDS_PER_STRIP + rCounterClock)].setHSV(chsv.h, chsv.s,
 			chsv.v * bottomPart);
 
-	leds[clamp(yTop * LEDS_PER_STRIP + rCounterClock)].setHSV(chsv.h, chsv.s,
+	animleds[clamp(yTop * LEDS_PER_STRIP + rCounterClock)].setHSV(chsv.h, chsv.s,
 			chsv.v * topPart);
 }
 
@@ -227,12 +194,12 @@ void LedManager::fireStep() {
 		} else {
 			pixelnumber = j;
 		}
-		leds[pixelnumber] = color;
+		animleds[pixelnumber] = color;
 	}
 
 	// Step 4.  Map from heat cells to LED colors
 	for (int j = 0; j < NUM_LEDS/2; j++) {
-		leds[NUM_LEDS - j - 1] = leds[j];
+		animleds[NUM_LEDS - j - 1] = animleds[j];
 	}
 }
 
@@ -271,7 +238,7 @@ void LedManager::fireRainbowTrans(){
 
 void LedManager::fillRed() {
 // red
-	leds.fill_solid(CHSV(255, 255, 20));
+	animleds.fill_solid(CHSV(255, 255, 20));
 }
 
 uint8_t LedManager::clamp(uint8_t ledCoord) {
@@ -281,8 +248,16 @@ uint8_t LedManager::clamp(uint8_t ledCoord) {
 void LedManager::step(AccelManager * accelManager) {
 	switch (mode) {
 	case 0:
-		horizonStep(accelManager);
+		horizonAnimation->step(accelManager);
+
+		for(int i = 0; i < 5*LEDS_PER_STRIP; i++) {
+			animleds[i] = horizonAnimation->animLeds[i];
+		}
+		// ARON ...maybe instead i should make a different kind of array for the other
+		// leds, on initialize it in a different way
+//		memmove(&horizonAnimation->animLeds[0], &animleds[0], NUM_LEDS * sizeof( CRGB));
 //		fireStep();
+//		rainbow2Step(accelManager);
 //		fireRainbowTrans();
 		break;
 	case 1:
@@ -297,6 +272,8 @@ void LedManager::step(AccelManager * accelManager) {
 		fireStep();
 		break;
 	}
+
+	// ARON todo: copy leds of animation to here
 
 	FastLED.show();
 }
