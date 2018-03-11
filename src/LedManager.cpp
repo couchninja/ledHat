@@ -10,8 +10,7 @@ CRGBArray<NUM_LEDS> animleds;
 #define NUM_MODES 4;
 int mode = 0;
 
-// ARON new was needed... whats the difference?
-HorizonAnimation * horizonAnimation = new HorizonAnimation();
+HorizonAnimation * horizonAnimation = new HorizonAnimation(LEDS_PER_STRIP, NUM_OF_STRIPS);
 
 LedManager::LedManager(bool wifiConnected) {
 	Serial.println("Initializing LedManager");
@@ -277,4 +276,5 @@ void LedManager::nextMode() {
 }
 
 LedManager::~LedManager() {
+	delete horizonAnimation;
 }

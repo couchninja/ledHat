@@ -5,15 +5,17 @@
 #include <FastLED.h>
 #include <AccelManager.h>
 
-#define LEDS_PER_STRIP 36
-#define NUM_OF_STRIPS 5
+
 #define NUM_LEDS NUM_OF_STRIPS*LEDS_PER_STRIP
 
 class Animation {
 public:
-//	CRGB * animLeds;
-	CRGB animLeds[NUM_LEDS];bool finished;
-	Animation();
+	bool finished;
+	int ledsPerStrip;
+	int numOfStrips;
+	int numOfLeds;
+	Animation(int ledsPerStrip, int numOfStrips);
+	CRGB * animLeds;
 	virtual void step(AccelManager * accelManager) = 0;
 	void setPixel(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv);
