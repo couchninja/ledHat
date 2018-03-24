@@ -9,7 +9,7 @@ public:
 	byte * heat;
 	int counter = 0;
 
-	FireAnimation(int ledsPerStrip, int numOfStrips);
+	FireAnimation();
 	void step(AccelManager * accelManager);
 	virtual ~FireAnimation();
 };

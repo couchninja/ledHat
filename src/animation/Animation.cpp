@@ -1,11 +1,6 @@
 #include <animation/Animation.h>
 
-Animation::Animation(int ledsPerStrip, int numOfStrips) {
-	this->ledsPerStrip = ledsPerStrip;
-	this->numOfStrips = numOfStrips;
-	numOfLeds = ledsPerStrip * numOfStrips;
-	leds = new CRGB[numOfLeds];
-	finished = false;
+Animation::Animation() {
 }
 
 /**
@@ -13,7 +8,7 @@ Animation::Animation(int ledsPerStrip, int numOfStrips) {
  * y: vertical index [0, numOfStrips> from top to bottom
  */
 void Animation::setPixel(uint8_t rIndex, uint8_t y, CHSV chsv) {
-	uint8_t yFromTop = numOfStrips - y - 1;
+	uint8_t yFromTop = numStrips - y - 1;
 	setPixelFromBottom(rIndex, yFromTop, chsv);
 }
 
@@ -51,7 +46,7 @@ void Animation::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
 }
 
 uint8_t Animation::clamp(uint8_t ledCoord) {
-	return _min(_max(ledCoord, 0), (numOfLeds - 1));
+	return _min(_max(ledCoord, 0), (numLeds - 1));
 }
 
 Animation::~Animation() {

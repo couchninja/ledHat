@@ -5,7 +5,7 @@
 
 class HorizonAnimation: public Animation {
 public:
-	HorizonAnimation(int ledsPerStrip, int numOfStrips);
+	HorizonAnimation();
 	void step(AccelManager * accelManager);
 	virtual ~HorizonAnimation();
 };

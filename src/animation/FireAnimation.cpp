@@ -21,9 +21,12 @@
 CRGBPalette16 gPal = HeatColors_p;
 bool gReverseDirection = false;
 
-FireAnimation::FireAnimation(int ledsPerStrip, int numOfStrips) :
-		Animation(ledsPerStrip, numOfStrips) {
-	heat = new byte[numOfLeds];
+FireAnimation::FireAnimation() :
+		Animation() {
+	// Add entropy to random number generator; we use a lot of it.
+  // random16_add_entropy( random());
+
+	heat = new byte[numLeds];
 }
 
 void FireAnimation::step(AccelManager * accelManager) {
@@ -36,32 +39,32 @@ void FireAnimation::step(AccelManager * accelManager) {
 	}
 
 	// Step 1.  Cool down every cell a little
-	for (int i = 0; i < numOfLeds; i++) {
-		heat[i] = qsub8(heat[i], random8(0, ((COOLING * 10) / numOfLeds) + 2));
+	for (int i = 0; i < numLeds; i++) {
+		heat[i] = qsub8(heat[i], random8(0, ((COOLING * 10) / numLeds) + 2));
 	}
 
 	// Step 2.  Heat from each cell drifts 'up' and diffuses a little
-	for (int k = numOfLeds - 1; k >= 2; k--) {
+	for (int k = numLeds - 1; k >= 2; k--) {
 		heat[k] = (heat[k - 1] + heat[k - 2] + heat[k - 2]) / 3;
 	}
 
 	// Step 3.  Randomly ignite new 'sparks' of heat
 	if (random8() < SPARKING) {
-		int y = random16(numOfLeds/4);
+		int y = random16(numLeds / 4);
 		heat[y] = qadd8(heat[y], random8(160, 255));
-		int y2 = random16(numOfLeds/8);
+		int y2 = random16(numLeds / 8);
 		heat[y2] = qadd8(heat[y2], random8(160, 255));
 	}
 
 	// Step 4.  Map from heat cells to LED colors
-	for (int j = 0; j < numOfLeds; j++) {
+	for (int j = 0; j < numLeds; j++) {
 		// Scale the heat value from 0-255 down to 0-240
 		// for best results with color palettes.
 		byte colorindex = scale8(heat[j], 240);
 		CRGB color = ColorFromPalette(gPal, colorindex);
 		int pixelnumber;
 		if (gReverseDirection) {
-			pixelnumber = (numOfLeds - 1) - j;
+			pixelnumber = (numLeds - 1) - j;
 		} else {
 			pixelnumber = j;
 		}
@@ -69,8 +72,8 @@ void FireAnimation::step(AccelManager * accelManager) {
 	}
 
 	// Step 4.  Map from heat cells to LED colors
-	for (int j = 0; j < numOfLeds/2; j++) {
-		leds[numOfLeds - j - 1] = leds[j];
+	for (int j = 0; j < numLeds / 2; j++) {
+		leds[numLeds - j - 1] = leds[j];
 	}
 }
 

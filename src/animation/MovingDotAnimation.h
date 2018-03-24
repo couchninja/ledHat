@@ -5,7 +5,7 @@
 
 class MovingDotAnimation: public Animation {
 public:
-	MovingDotAnimation(int ledsPerStrip, int numOfStrips);
+	MovingDotAnimation();
 	void step(AccelManager * accelManager);
 	virtual ~MovingDotAnimation();
 };

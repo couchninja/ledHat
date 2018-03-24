@@ -8,10 +8,12 @@
 // - https://github.com/FastLED/FastLED/issues/337
 #define FASTLED_ALLOW_INTERRUPTS 0
 #include <FastLED.h>
+#include<settings/ledSettings.h>
 #include<AccelManager.h>
 #include<animation/FireAnimation.h>
 #include<animation/HorizonAnimation.h>
 #include<animation/MovingDotAnimation.h>
+#include<animation/RainbowAnimation.h>
 
 class LedManager {
 public:
