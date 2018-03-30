@@ -23,6 +23,8 @@ public:
 
 	virtual void step(AccelManager * accelManager) = 0;
 	void setPixel(uint8_t rIndex, uint8_t y, CHSV chsv);
+	void setPixelFromTop(uint8_t rIndex, uint8_t y, CHSV chsv);
+	void setPixelFromTopF(uint8_t rIndex, float y, CHSV chsv);
 	void setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv);
 	uint8_t clamp(uint8_t ledCoord);

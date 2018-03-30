@@ -9,6 +9,7 @@ Animation * horizonAnimation = new HorizonAnimation();
 Animation * fireAnimation = new FireAnimation();
 Animation * movingDotAnimation = new MovingDotAnimation();
 Animation * rainbowAnimation = new RainbowAnimation();
+Animation * accelAnimation = new AccelAnimation();
 
 LedManager::LedManager(bool wifiConnected) {
 	Serial.println("Initializing LedManager");
@@ -29,7 +30,7 @@ void LedManager::step(AccelManager * accelManager) {
 	Animation * activeAnim;
 	switch (mode) {
 	case 0:
-		activeAnim = horizonAnimation;
+		activeAnim = accelAnimation;
 		break;
 	case 1:
 		activeAnim = rainbowAnimation;

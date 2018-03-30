@@ -9,15 +9,33 @@ Animation::Animation() {
  */
 void Animation::setPixel(uint8_t rIndex, uint8_t y, CHSV chsv) {
 	uint8_t yFromTop = numStrips - y - 1;
-	setPixelFromBottom(rIndex, yFromTop, chsv);
+	setPixelFromTop(rIndex, yFromTop, chsv);
 }
 
 /**
  * Resilient agains out-of-bounds coordinates (thanks to fastLed)
- * r: radial index [0, ledsPerStrip> clockwise
+ * r: radial index [0, ledsPerStrip> counterclockwise. 0 is the back of the hat.
  * y: vertical index [0, numOfStrips> from bottom to top
  */
 void Animation::setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv) {
+	this->setPixelFromTop(rIndex, numStrips-y-1, chsv);
+}
+
+/**
+ * Resilient agains out-of-bounds coordinates (thanks to fastLed)
+ * r: radial index [0, ledsPerStrip> counterclockwise. 0 is the back of the hat.
+ * y: vertical index [0, numOfStrips> from bottom to top
+ */
+void Animation::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
+	this->setPixelFromTopF(rIndex, numStrips-y-1, chsv);
+}
+
+/**
+ * Resilient agains out-of-bounds coordinates (thanks to fastLed)
+ * r: radial index [0, ledsPerStrip> counterclockwise. 0 is the back of the hat.
+ * y: vertical index [0, numOfStrips> from bottom to top
+ */
+void Animation::setPixelFromTop(uint8_t rIndex, uint8_t y, CHSV chsv) {
 	uint8_t rCounterClock = ledsPerStrip - rIndex - 1;
 
 	leds[y * ledsPerStrip + rCounterClock] = chsv;
@@ -25,10 +43,10 @@ void Animation::setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv) {
 
 /**
  * Resilient agains out-of-bounds coordinates (thanks to fastLed)
- * r: radial index [0, ledsPerStrip> clockwise
+ * r: radial index [0, ledsPerStrip> counterclockwise. 0 is the back of the hat.
  * y: vertical index [0, numOfStrips> from bottom to top
  */
-void Animation::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
+void Animation::setPixelFromTopF(uint8_t rIndex, float y, CHSV chsv) {
 	float rCounterClock = ledsPerStrip - rIndex - 1;
 
 	uint8_t yBott = (uint8_t) y;

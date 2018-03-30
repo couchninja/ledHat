@@ -10,6 +10,7 @@
 #include <FastLED.h>
 #include<settings/ledSettings.h>
 #include<AccelManager.h>
+#include<animation/AccelAnimation.h>
 #include<animation/FireAnimation.h>
 #include<animation/HorizonAnimation.h>
 #include<animation/MovingDotAnimation.h>

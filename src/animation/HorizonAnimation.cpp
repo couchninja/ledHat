@@ -9,7 +9,7 @@ void HorizonAnimation::step(AccelManager * accelManager) {
 	leds.fadeToBlackBy(80);
 
 	// from -1 (backside down) to +1 (frontside down)
-	float pitchNormalized = (accelManager->ypr[1]) / (M_PI * 0.5);
+	float pitchNormalized = -(accelManager->ypr[2]) / (M_PI * 0.5);
 
 	float yAvgIndex = 2;
 	CHSV c = CHSV(50, 255, 255);
@@ -29,16 +29,16 @@ void HorizonAnimation::step(AccelManager * accelManager) {
 			c);
 
 	// -1 (right down) to +1 (left down)
-	float rollNormalized = (accelManager->ypr[2]) / (M_PI * 0.5);
+	float rollNormalized = -(accelManager->ypr[1]) / (M_PI * 0.5);
 
 	// In # of strips.
-	float leftStripHeight = -rollNormalized * numStrips;
-	setPixelFromBottomF((ledsPerStrip - 1) * 0.25, yAvgIndex + leftStripHeight,
+	float leftStripHeight = rollNormalized * numStrips;
+	setPixelFromBottomF((ledsPerStrip - 1) * 0.75, yAvgIndex + leftStripHeight,
 			c);
 
 	// In # of strips.
-	float rightStripHeight = rollNormalized * numStrips;
-	setPixelFromBottomF((ledsPerStrip - 1) * 0.75, yAvgIndex + rightStripHeight,
+	float rightStripHeight = -rollNormalized * numStrips;
+	setPixelFromBottomF((ledsPerStrip - 1) * 0.25, yAvgIndex + rightStripHeight,
 			c);
 }
 
