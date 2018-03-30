@@ -43,6 +43,7 @@ void FireAnimation::step(AccelManager * accelManager) {
 		heat[i] = qsub8(heat[i], random8(0, ((COOLING * 10) / numLeds) + 2));
 	}
 
+	// ARON why does this use '-2' index twice?
 	// Step 2.  Heat from each cell drifts 'up' and diffuses a little
 	for (int k = numLeds - 1; k >= 2; k--) {
 		heat[k] = (heat[k - 1] + heat[k - 2] + heat[k - 2]) / 3;
@@ -71,7 +72,7 @@ void FireAnimation::step(AccelManager * accelManager) {
 		leds[pixelnumber] = color;
 	}
 
-	// Step 4.  Map from heat cells to LED colors
+	// Step 5. mirror leds on other side
 	for (int j = 0; j < numLeds / 2; j++) {
 		leds[numLeds - j - 1] = leds[j];
 	}

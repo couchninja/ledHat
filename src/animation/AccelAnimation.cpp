@@ -1,97 +1,104 @@
 #include <animation/AccelAnimation.h>
 
-AccelAnimation::AccelAnimation() {
-}
-
-float lastAAX = 0;
-float lastAAY = 0;
-float lastAAZ = 0;
+VectorInt16 lastAaReal = VectorInt16();
 
 float rollingDiff = 0;
 float rollingMaxDiff = 0;
 
+// Temperature is in arbitrary units from 0 (cold black) to 255 (white hot).
+#define COOLING  10
+
+// SPARKING: What chance (out of 255) is there that a new spark will be lit?
+// Higher chance = more roaring fire.  Lower chance = more flickery fire.
+// Default 120, suggested range 50-200.
+#define SPARKING 255
+
+// Array of temperature readings at each simulation cell
+byte * heat;
+
+// ARON make classvar
+CRGBPalette16 gPal2 = HeatColors_p;
+
+AccelAnimation::AccelAnimation() {
+	CRGBPalette16 gPal = HeatColors_p;
+	heat = new byte[numLeds];
+}
+
 void AccelAnimation::step(AccelManager * accelManager) {
-	leds.fadeToBlackBy(220);
+//	leds.fadeToBlackBy(220);
 //	leds.blur1d(64);
 
-// from -1 (backside down) to +1 (frontside down)
-//	float pitchNormalized = -(accelManager->ypr[2]) / (M_PI * 0.5);
-
-//	float intensity = 0;
-
-//	if (lastAAX < 0 && accelManager->aaWorld.x > 0) {
-//		intensity = 255;
-//		CHSV c = CHSV(255, 255, intensity);
-//		leds.fill_solid(c);
-//	} else if (lastAAX > 0 && accelManager->aaWorld.x < 0) {
-//		intensity = 255;
-//		CHSV c = CHSV(255, 255, intensity);
-//		leds.fill_solid(c);
-//	}
-//
-//	if (lastAAY < 0 && accelManager->aaWorld.y > 0) {
-//		intensity = 255;
-//		CHSV c = CHSV(100, 255, intensity);
-//		leds.fill_solid(c);
-//	} else if (lastAAY > 0 && accelManager->aaWorld.y < 0) {
-//		intensity = 255;
-//		CHSV c = CHSV(100, 255, intensity);
-//		leds.fill_solid(c);
-//	}
-
-//	if (abs(accelManager->aaWorld.x) > 4000) {
-//		CHSV c = CHSV(255, 255, 255);
-//		leds.fill_solid(c);
-//	} else if (abs(accelManager->aaWorld.y) > 4000) {
-//		CHSV c = CHSV(50, 255, 255);
-//		leds.fill_solid(c);
-//	} else {
-//		CHSV c = CHSV(50, 255, 0);
-//		leds.fill_solid(c);
-//	}
-
-//	CHSV c = CHSV(255, 255, abs(accelManager->aaWorld.y) / 100);
-//	leds.fill_solid(c);
-
-	float diff = abs(lastAAX - accelManager->aaReal.x)
-			+ abs(lastAAY - accelManager->aaReal.y)
-			+ abs(lastAAZ - accelManager->aaReal.z);
+	float diff = abs(lastAaReal.x - accelManager->aaReal.x)
+			+ abs(lastAaReal.y - accelManager->aaReal.y)
+			+ abs(lastAaReal.z - accelManager->aaReal.z);
 	rollingDiff += diff;
 	rollingMaxDiff *= 0.99;
 	rollingMaxDiff = _max(rollingDiff, rollingMaxDiff);
 	rollingMaxDiff = _max(1000.0, rollingMaxDiff);
 
-	// scaled to approx 0...1
-	float intensity = rollingDiff / rollingMaxDiff * 255.0 * 4.0;
+	// scaled to approx 0...255
+	float intensity = rollingDiff / rollingMaxDiff * 255; // * (numStrips - 1);
 
-	Serial.println(rollingMaxDiff);
+	if (intensity < 200)
+		intensity = 0;
 
-	for (int i = numStrips-1; i >= 0; i--) {
-		CHSV c = CHSV(255, 255, intensity);
-		intensity -= 255;
-		intensity = _max(0, intensity);
+//	Serial.println(rollingMaxDiff);
+
+// Step 1.  Cool down every cell a little
+	for (int i = 0; i < numLeds; i++) {
+		heat[i] = qsub8(heat[i], random8(0, COOLING));
+	}
+
+//	for (int y = numStrips - 1; y >= 0; y--) {
+//		CHSV c = CHSV(255, 255, intensity);
+//		intensity -= 255;
+//		intensity = _max(0, intensity);
+//		for (int r = 0; r < ledsPerStrip; r++) {
+//			heat[y * ledsPerStrip + r] = _min(255, intensity);
+//		}
+//	}
+
+	int lowestStrip = numStrips - 1;
+	for (int r = 0; r < ledsPerStrip; r++) {
+		heat[lowestStrip * ledsPerStrip + r] = qadd8(
+				heat[lowestStrip * ledsPerStrip + r], random8(0, intensity));
+	}
+
+	// Heat from each cell drifts 'up' and diffuses a little
+	// We do this by going *down* trough the vertical lines
+	for (int y = 0; y < numStrips; y++) {
 		for (int r = 0; r < ledsPerStrip; r++) {
-			leds[i * ledsPerStrip + r] = c;
+			if (y == 3) {
+				heat[y * ledsPerStrip + r] = heat[y * ledsPerStrip + r] * 0.4
+						+ heat[(y + 1) * ledsPerStrip + r] * 0.6;
+			} else if (y == 4) {
+				// ARON cast?
+				heat[y * ledsPerStrip + r] = heat[y * ledsPerStrip + r] * 0.7;
+			} else {
+				heat[y * ledsPerStrip + r] = heat[y * ledsPerStrip + r] * 0.6
+						+ heat[(y + 1) * ledsPerStrip + r] * 0.3
+						+ heat[(y + 2) * ledsPerStrip + r] * 0.1;
+			}
 		}
 	}
 
-//	CHSV c = CHSV(255, 255, intensity);
-//	leds.fill_solid(c);
-
-//	float intensity = _min(1, fabs(pitchNormalized));
-
 //	float intensity = abs(accelManager->aaReal.x) / 10 * 255;
-
-// ARON more useful to work from direction changes i guess.
-
-//	Serial.println(255*intensity);
 
 //	Serial.println("intensity");
 //	Serial.println(255*intensity);
 
-	lastAAX = accelManager->aaReal.x;
-	lastAAY = accelManager->aaReal.y;
-	lastAAZ = accelManager->aaReal.z;
+// Map from heat cells to LED colors
+	for (int i = 0; i < numLeds; i++) {
+		// Scale the heat value from 0-255 down to 0-??
+		byte colorindex = scale8(heat[i], 255);
+		CRGB color = ColorFromPalette(gPal2, colorindex);
+		leds[i] = color;
+	}
+
+	lastAaReal.x = accelManager->aaReal.x;
+	lastAaReal.y = accelManager->aaReal.y;
+	lastAaReal.z = accelManager->aaReal.z;
+
 	rollingDiff *= 0.2;
 }
 
