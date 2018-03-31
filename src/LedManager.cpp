@@ -3,13 +3,14 @@
 CRGBArray<LedSettings::NUM_LEDS> leds;
 
 #define NUM_MODES 3;
-int mode = 2;
+int mode = 1;
 
 Animation * horizonAnimation = new HorizonAnimation();
 Animation * fireAnimation = new FireAnimation();
 Animation * movingDotAnimation = new MovingDotAnimation();
 Animation * rainbowAnimation = new RainbowAnimation();
 Animation * accelAnimation = new AccelAnimation();
+Animation * stableDollarAnimation = new StableDollarAnimation();
 
 LedManager::LedManager(bool wifiConnected) {
 	Serial.println("Initializing LedManager");
@@ -33,7 +34,7 @@ void LedManager::step(AccelManager * accelManager) {
 		activeAnim = movingDotAnimation;
 		break;
 	case 1:
-		activeAnim = rainbowAnimation;
+		activeAnim = stableDollarAnimation;
 		break;
 	case 2:
 		activeAnim = accelAnimation;

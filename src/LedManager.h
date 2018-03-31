@@ -15,6 +15,7 @@
 #include<animation/HorizonAnimation.h>
 #include<animation/MovingDotAnimation.h>
 #include<animation/RainbowAnimation.h>
+#include<animation/StableDollarAnimation.h>
 
 class LedManager {
 public:

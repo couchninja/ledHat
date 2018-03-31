@@ -36,9 +36,11 @@ void Animation::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
  * y: vertical index [0, numOfStrips> from bottom to top
  */
 void Animation::setPixelFromTop(uint8_t rIndex, uint8_t y, CHSV chsv) {
-	uint8_t rCounterClock = ledsPerStrip - rIndex - 1;
-
-	leds[y * ledsPerStrip + rCounterClock] = chsv;
+	if(y < numStrips) {
+		rIndex %= ledsPerStrip;
+		uint8_t rCounterClock = ledsPerStrip - rIndex - 1;
+		leds[y * ledsPerStrip + rCounterClock] = chsv;
+	}
 }
 
 /**
