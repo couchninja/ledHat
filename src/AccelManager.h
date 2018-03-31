@@ -15,13 +15,26 @@
 class AccelManager {
 public:
 	// orientation/motion vars
-	Quaternion q;           // [w, x, y, z]         quaternion container
-	VectorInt16 aa;         // [x, y, z]            accel sensor measurements
-	VectorInt16 aaReal; // [x, y, z]            gravity-free accel sensor measurements
-	VectorInt16 aaWorld; // [x, y, z]            world-frame accel sensor measurements
-	VectorFloat gravity;    // [x, y, z]            gravity vector
-	float euler[3]; // [psi, theta, phi]    Euler angle container
-	float ypr[3]; // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
+	// [w, x, y, z] quaternion container
+	Quaternion q;
+	// [x, y, z] accel sensor measurements
+	VectorInt16 aa;
+	// [x, y, z] gravity-free accel sensor measurements
+	VectorInt16 aaReal;
+	// [x, y, z] world-frame accel sensor measurements
+	VectorInt16 aaWorld;
+	// [x, y, z] gravity vector
+	VectorFloat gravity;
+	// [psi, theta, phi] Euler angle container
+	float euler[3];
+	// [yaw, pitch, roll] yaw/pitch/roll container and gravity vector
+	float ypr[3];
+
+	// ARON
+	float rollingDiff = 0;
+	float rollingMaxDiff = 0;
+	bool motionTriggered = false;
+	bool consumeMotionTriggered();
 
 	AccelManager();
 	void step();

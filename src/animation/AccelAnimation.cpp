@@ -1,10 +1,5 @@
 #include <animation/AccelAnimation.h>
 
-VectorInt16 lastAaReal = VectorInt16();
-
-float rollingDiff = 0;
-float rollingMaxDiff = 0;
-
 // Temperature is in arbitrary units from 0 (cold black) to 255 (white hot).
 #define COOLING  10
 
@@ -28,19 +23,18 @@ void AccelAnimation::step(AccelManager * accelManager) {
 //	leds.fadeToBlackBy(220);
 //	leds.blur1d(64);
 
-	float diff = abs(lastAaReal.x - accelManager->aaReal.x)
-			+ abs(lastAaReal.y - accelManager->aaReal.y)
-			+ abs(lastAaReal.z - accelManager->aaReal.z);
-	rollingDiff += diff;
-	rollingMaxDiff *= 0.99;
-	rollingMaxDiff = _max(rollingDiff, rollingMaxDiff);
-	rollingMaxDiff = _max(1000.0, rollingMaxDiff);
+// scaled to approx 0...255
+	float intensity = accelManager->rollingDiff / accelManager->rollingMaxDiff
+			* 255; // * (numStrips - 1);
+	// high intensity if little movement
+//	float intensity = (rollingMaxDiff - rollingDiff)/rollingMaxDiff * 255; // * (numStrips - 1);
 
-	// scaled to approx 0...255
-	float intensity = rollingDiff / rollingMaxDiff * 255; // * (numStrips - 1);
+//	if (intensity < 50)
+//		intensity = 0;
 
-	if (intensity < 200)
-		intensity = 0;
+	intensity -= 230;
+	intensity = _max(0, intensity);
+//	Serial.println(intensity);
 
 //	Serial.println(rollingMaxDiff);
 
@@ -58,10 +52,21 @@ void AccelAnimation::step(AccelManager * accelManager) {
 //		}
 //	}
 
+	// Eirinns method, not really working for me
+//	bool activated = false;
+//	float totalAccel = abs(accelManager->aaReal.x) + abs(accelManager->aaReal.y)
+//			+ abs(accelManager->aaReal.z);
+//
+//	Serial.println(totalAccel);
+//	if (totalAccel > 8000)
+//		activated = true;
+
 	int lowestStrip = numStrips - 1;
-	for (int r = 0; r < ledsPerStrip; r++) {
-		heat[lowestStrip * ledsPerStrip + r] = qadd8(
-				heat[lowestStrip * ledsPerStrip + r], random8(0, intensity));
+	if (intensity > 0) {
+		for (int r = 0; r < ledsPerStrip; r++) {
+			heat[lowestStrip * ledsPerStrip + r] = qadd8(
+					heat[lowestStrip * ledsPerStrip + r], random8(0, 255));
+		}
 	}
 
 	// Heat from each cell drifts 'up' and diffuses a little
@@ -95,11 +100,14 @@ void AccelAnimation::step(AccelManager * accelManager) {
 		leds[i] = color;
 	}
 
-	lastAaReal.x = accelManager->aaReal.x;
-	lastAaReal.y = accelManager->aaReal.y;
-	lastAaReal.z = accelManager->aaReal.z;
+//	leds.fill_solid(CHSV(255, 255, intensity));
 
-	rollingDiff *= 0.2;
+	// ARON
+	//	if (accelManager->consumeMotionTriggered()) {
+	//		leds.fill_solid(CHSV(255, 255, 255));
+	//	} else {
+	//		leds.fill_solid(CHSV(255, 255, 0));
+	//  }
 }
 
 AccelAnimation::~AccelAnimation() {

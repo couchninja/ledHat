@@ -3,7 +3,7 @@
 CRGBArray<LedSettings::NUM_LEDS> leds;
 
 #define NUM_MODES 3;
-int mode = 0;
+int mode = 2;
 
 Animation * horizonAnimation = new HorizonAnimation();
 Animation * fireAnimation = new FireAnimation();

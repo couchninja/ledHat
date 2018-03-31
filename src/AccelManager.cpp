@@ -61,6 +61,10 @@ uint16_t fifoCount;
 // FIFO storage buffer
 uint8_t fifoBuffer[64];
 
+VectorInt16 lastAaReal = VectorInt16();
+VectorInt16 smoothAaReal = VectorInt16();
+VectorInt16 lastSmoothAaReal = VectorInt16();
+
 // ================================================================
 // ===               INTERRUPT DETECTION ROUTINE                ===
 // ================================================================
@@ -244,7 +248,65 @@ void AccelManager::step() {
 		Serial.print("\t");
 		Serial.println(aaWorld.z);
 #endif
+
+		smoothAaReal.x = lastAaReal.x * 0.2 + aaReal.x * 0.8;
+		smoothAaReal.y = lastAaReal.y * 0.2 + aaReal.y * 0.8;
+		smoothAaReal.z = lastAaReal.z * 0.2 + aaReal.z * 0.8;
+
+		float diff = abs(lastAaReal.x - aaReal.x) + abs(lastAaReal.y - aaReal.y)
+				+ abs(lastAaReal.z - aaReal.z);
+
+//		if ((aaReal.x > 0 && lastAaReal.x < 0) || (aaReal.x < 0 && lastAaReal.x > 0)
+//				|| (aaReal.y > 0 && lastAaReal.y < 0)
+//				|| (aaReal.y < 0 && lastAaReal.y > 0)
+//				|| (aaReal.z > 0 && lastAaReal.z < 0)
+//				|| (aaReal.z < 0 && lastAaReal.z > 0)) {
+//			motionTriggered = true;
+//		}
+
+		if ((smoothAaReal.x > 0 && lastSmoothAaReal.x < 0)
+				|| (smoothAaReal.x < 0 && lastSmoothAaReal.x > 0)
+				|| (smoothAaReal.y > 0 && lastSmoothAaReal.y < 0)
+				|| (smoothAaReal.y < 0 && lastSmoothAaReal.y > 0)
+				|| (smoothAaReal.z > 0 && lastSmoothAaReal.z < 0)
+				|| (smoothAaReal.z < 0 && lastSmoothAaReal.z > 0)) {
+			// not really working as i had hoped, just too randomly activated
+			motionTriggered = true;
+		}
+
+		rollingDiff = rollingDiff * 0.8 + diff * 0.2;
+		rollingMaxDiff *= 0.99;
+
+//		if(rollingDiff > rollingMaxDiff) {
+//			motionTriggered = true;
+//		}
+
+		rollingMaxDiff = _max(rollingDiff, rollingMaxDiff);
+//		Serial.println(rollingMaxDiff);
+		rollingMaxDiff = _max(400.0, rollingMaxDiff);
+
+//		if (rollingMaxDiff / rollingDiff > 0.8) {
+//			motionTriggered = true;
+//		}
+
+//		Serial.println(rollingMaxDiff);
+
+		lastAaReal.x = aaReal.x;
+		lastAaReal.y = aaReal.y;
+		lastAaReal.z = aaReal.z;
+
+		lastSmoothAaReal.x = smoothAaReal.x;
+		lastSmoothAaReal.y = smoothAaReal.y;
+		lastSmoothAaReal.z = smoothAaReal.z;
+
+//		rollingDiff *= 0.2;
 	}
+}
+
+bool AccelManager::consumeMotionTriggered() {
+	bool motionWasTriggered = motionTriggered;
+	motionTriggered = false;
+	return motionWasTriggered;
 }
 
 AccelManager::~AccelManager() {

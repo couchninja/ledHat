@@ -1,5 +1,7 @@
 #include <animation/MovingDotAnimation.h>
 
+
+
 uint8_t hue;
 uint8_t offset;
 
@@ -10,6 +12,12 @@ MovingDotAnimation::MovingDotAnimation() :
 void MovingDotAnimation::step(AccelManager * accelManager) {
 	leds.fadeToBlackBy(80);
 	leds.blur1d(64);
+
+
+	// scaled to approx 0...255
+	float intensity = accelManager->rollingDiff / accelManager->rollingMaxDiff * 255; // * (numStrips - 1);
+
+	intensity = _max(50, intensity);
 
 	// normalize to 0 ... 1 (not sure about inclusive/exclusive)
 	float pitchNormalized = (accelManager->ypr[0] + M_PI / 2) / (M_PI);
@@ -26,6 +34,7 @@ void MovingDotAnimation::step(AccelManager * accelManager) {
 		}
 	}
 
+	// update vars
 	hue++;
 }
 

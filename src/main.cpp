@@ -18,7 +18,8 @@ AccelManager * accelManager;
 #define MS_PER_LED_UPDATE 20
 #define MS_PER_OTA_CHECK 50
 
-// read serial output with: pio -f -c eclipse device monitor --baud 9600
+// read serial output with:
+//    pio -f -c eclipse device monitor --baud 9600
 #define BAUDRATE 9600
 
 long lastLedStep = 0;
