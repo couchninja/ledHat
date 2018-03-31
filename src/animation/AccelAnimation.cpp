@@ -14,6 +14,8 @@ byte * heat;
 // ARON make classvar
 CRGBPalette16 gPal2 = HeatColors_p;
 
+int idleCounter = 0;
+
 AccelAnimation::AccelAnimation() {
 	CRGBPalette16 gPal = HeatColors_p;
 	heat = new byte[numLeds];
@@ -29,10 +31,13 @@ void AccelAnimation::step(AccelManager * accelManager) {
 	// high intensity if little movement
 //	float intensity = (rollingMaxDiff - rollingDiff)/rollingMaxDiff * 255; // * (numStrips - 1);
 
-//	if (intensity < 50)
-//		intensity = 0;
+	if (intensity < 230) {
+		intensity = 0;
+		idleCounter++;
+	} else {
+		idleCounter = 0;
+	}
 
-	intensity -= 230;
 	intensity = _max(0, intensity);
 //	Serial.println(intensity);
 
@@ -108,6 +113,23 @@ void AccelAnimation::step(AccelManager * accelManager) {
 	//	} else {
 	//		leds.fill_solid(CHSV(255, 255, 0));
 	//  }
+
+	if (idleCounter > 10) {
+		float alpha = _min(1, (idleCounter - 10) / 100.0);
+		float aTime = 100;
+
+//		Serial.println(cos(((float)idleCounter)/aTime));
+
+		this->addDollar(1, 255.0 * ((cos((idleCounter) / aTime) + 1) / 2) * alpha);
+		this->addDollar(8,
+				255.0 * ((cos((idleCounter + 40) / aTime) + 1) / 2) * alpha);
+		this->addDollar(15,
+				255.0 * ((cos((idleCounter + 80) / aTime) + 1) / 2) * alpha);
+		this->addDollar(22,
+				255.0 * ((cos((idleCounter + 20) / aTime) + 1) / 2) * alpha);
+		this->addDollar(29,
+				255.0 * ((cos((idleCounter + 60) / aTime) + 1) / 2) * alpha);
+	}
 }
 
 AccelAnimation::~AccelAnimation() {

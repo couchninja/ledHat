@@ -18,7 +18,7 @@ void Animation::setPixel(uint8_t rIndex, uint8_t y, CHSV chsv) {
  * y: vertical index [0, numOfStrips> from bottom to top
  */
 void Animation::setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv) {
-	this->setPixelFromTop(rIndex, numStrips-y-1, chsv);
+	this->setPixelFromTop(rIndex, numStrips - y - 1, chsv);
 }
 
 /**
@@ -27,7 +27,7 @@ void Animation::setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv) {
  * y: vertical index [0, numOfStrips> from bottom to top
  */
 void Animation::setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv) {
-	this->setPixelFromTopF(rIndex, numStrips-y-1, chsv);
+	this->setPixelFromTopF(rIndex, numStrips - y - 1, chsv);
 }
 
 /**
@@ -65,6 +65,25 @@ void Animation::setPixelFromTopF(uint8_t rIndex, float y, CHSV chsv) {
 
 uint8_t Animation::clamp(uint8_t ledCoord) {
 	return _min(_max(ledCoord, 0), (numLeds - 1));
+}
+
+void Animation::addDollar(uint8_t r, uint8_t opacity) {
+	CHSV dGreen = CHSV(80, 255, opacity);
+	CHSV lGreen = CHSV(80, 150, opacity);
+	this->setPixelFromTop(r + 1, 0, dGreen);
+	this->setPixelFromTop(r + 2, 0, dGreen);
+	this->setPixelFromTop(r + 3, 0, dGreen);
+	this->setPixelFromTop(r, 1, dGreen);
+	this->setPixelFromTop(r + 1, 2, dGreen);
+	this->setPixelFromTop(r + 3, 2, dGreen);
+	this->setPixelFromTop(r + 4, 3, dGreen);
+	this->setPixelFromTop(r + 1, 4, dGreen);
+	this->setPixelFromTop(r + 2, 4, dGreen);
+	this->setPixelFromTop(r + 3, 4, dGreen);
+
+	this->setPixelFromTop(r + 2, 1, lGreen);
+	this->setPixelFromTop(r + 2, 2, lGreen);
+	this->setPixelFromTop(r + 2, 3, lGreen);
 }
 
 Animation::~Animation() {
