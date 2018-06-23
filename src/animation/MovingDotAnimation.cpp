@@ -5,22 +5,30 @@
 uint8_t hue;
 uint8_t offset;
 
+int idleCounter2 = 0;
+
 MovingDotAnimation::MovingDotAnimation() :
 		Animation() {
 }
 
 void MovingDotAnimation::step(AccelManager * accelManager) {
 	leds.fadeToBlackBy(80);
-	leds.blur1d(64);
-
+	leds.blur1d(200);
 
 	// scaled to approx 0...255
 	float intensity = accelManager->rollingDiff / accelManager->rollingMaxDiff * 255; // * (numStrips - 1);
 
+	if (intensity < 230) {
+			intensity = 0;
+			idleCounter2++;
+		} else {
+			idleCounter2 = 0;
+		}
+
 	intensity = _max(50, intensity);
 
 	// normalize to 0 ... 1 (not sure about inclusive/exclusive)
-	float pitchNormalized = (accelManager->ypr[0] + M_PI / 2) / (M_PI);
+	float pitchNormalized = (accelManager->ypr[2] + M_PI / 2) / (M_PI);
 	offset = pitchNormalized * ledsPerStrip;
 
 	offset %= ledsPerStrip;

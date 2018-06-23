@@ -3,7 +3,7 @@
 CRGBArray<LedSettings::NUM_LEDS> leds;
 
 #define NUM_MODES 3;
-int mode = 1;
+int mode = 0;
 
 Animation * horizonAnimation = new HorizonAnimation();
 Animation * fireAnimation = new FireAnimation();
@@ -15,7 +15,7 @@ Animation * stableDollarAnimation = new StableDollarAnimation();
 LedManager::LedManager(bool wifiConnected) {
 	Serial.println("Initializing LedManager");
 
-	FastLED.setMaxPowerInVoltsAndMilliamps(5, 100);
+	FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);
 	FastLED.addLeds<WS2812B, D6, GRB>(leds, LedSettings::NUM_LEDS);
 
 	if (wifiConnected)
@@ -34,7 +34,7 @@ void LedManager::step(AccelManager * accelManager) {
 		activeAnim = movingDotAnimation;
 		break;
 	case 1:
-		activeAnim = stableDollarAnimation;
+		activeAnim = rainbowAnimation;
 		break;
 	case 2:
 		activeAnim = accelAnimation;
