@@ -16,6 +16,9 @@ CRGBPalette16 gPal2 = HeatColors_p;
 
 int idleCounter = 0;
 
+uint8_t dotsHue;
+uint8_t dotsOffset;
+
 AccelAnimation::AccelAnimation() {
 	CRGBPalette16 gPal = HeatColors_p;
 	heat = new byte[numLeds];
@@ -114,22 +117,46 @@ void AccelAnimation::step(AccelManager * accelManager) {
 	//		leds.fill_solid(CHSV(255, 255, 0));
 	//  }
 
+	//// DOLLAR$
+//	if (idleCounter > 10) {
+//		float alpha = _min(1, (idleCounter - 10) / 100.0);
+//		float aTime = 100;
+//
+////		Serial.println(cos(((float)idleCounter)/aTime));
+//
+//		this->addDollar(1, 255.0 * ((cos((idleCounter) / aTime) + 1) / 2) * alpha);
+//		this->addDollar(8,
+//				255.0 * ((cos((idleCounter + 40) / aTime) + 1) / 2) * alpha);
+//		this->addDollar(15,
+//				255.0 * ((cos((idleCounter + 80) / aTime) + 1) / 2) * alpha);
+//		this->addDollar(22,
+//				255.0 * ((cos((idleCounter + 20) / aTime) + 1) / 2) * alpha);
+//		this->addDollar(29,
+//				255.0 * ((cos((idleCounter + 60) / aTime) + 1) / 2) * alpha);
+//	}
+
 	if (idleCounter > 10) {
-		float alpha = _min(1, (idleCounter - 10) / 100.0);
-		float aTime = 100;
+			float alpha = _min(1, (idleCounter - 10) / 100.0);
 
-//		Serial.println(cos(((float)idleCounter)/aTime));
+			// normalize to 0 ... 1 (not sure about inclusive/exclusive)
+				float pitchNormalized = (accelManager->ypr[2] + M_PI / 2) / (M_PI);
+				dotsOffset = pitchNormalized * ledsPerStrip;
 
-		this->addDollar(1, 255.0 * ((cos((idleCounter) / aTime) + 1) / 2) * alpha);
-		this->addDollar(8,
-				255.0 * ((cos((idleCounter + 40) / aTime) + 1) / 2) * alpha);
-		this->addDollar(15,
-				255.0 * ((cos((idleCounter + 80) / aTime) + 1) / 2) * alpha);
-		this->addDollar(22,
-				255.0 * ((cos((idleCounter + 20) / aTime) + 1) / 2) * alpha);
-		this->addDollar(29,
-				255.0 * ((cos((idleCounter + 60) / aTime) + 1) / 2) * alpha);
-	}
+				dotsOffset %= ledsPerStrip;
+
+				for (uint8_t vline = 0; vline < 4; vline++) {
+					for (uint8_t hline = 0; hline < numStrips; hline++) {
+						int lineOffset = dotsOffset + ledsPerStrip / 4 * vline;
+						lineOffset %= ledsPerStrip;
+						int sat = (255.0 / 4.0) * (float) (numStrips - hline - 1);
+						leds[hline * ledsPerStrip + lineOffset] = CHSV(dotsHue + intensity, sat, alpha);
+					}
+				}
+				leds.blur1d(200);
+
+				// update vars
+				dotsHue++;
+		}
 }
 
 AccelAnimation::~AccelAnimation() {

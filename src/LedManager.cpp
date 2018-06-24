@@ -31,13 +31,13 @@ void LedManager::step(AccelManager * accelManager) {
 	Animation * activeAnim;
 	switch (mode) {
 	case 0:
-		activeAnim = movingDotAnimation;
+		activeAnim = accelAnimation;
 		break;
 	case 1:
 		activeAnim = rainbowAnimation;
 		break;
 	case 2:
-		activeAnim = accelAnimation;
+		activeAnim = movingDotAnimation;
 		break;
 	}
 
