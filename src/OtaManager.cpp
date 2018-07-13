@@ -8,6 +8,7 @@ OtaManager::OtaManager() {
 		Serial.println("Connection Failed!");
 //		delay(5000);
 //		ESP.restart();
+		WiFi.mode(WIFI_OFF);
 		return;
 	}
 

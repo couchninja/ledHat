@@ -15,7 +15,7 @@ Animation * stableDollarAnimation = new StableDollarAnimation();
 LedManager::LedManager(bool wifiConnected) {
 	Serial.println("Initializing LedManager");
 
-	FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);
+	FastLED.setMaxPowerInVoltsAndMilliamps(5, 10);
 	FastLED.addLeds<WS2812B, D6, GRB>(leds, LedSettings::NUM_LEDS);
 
 	if (wifiConnected)
@@ -31,13 +31,15 @@ void LedManager::step(AccelManager * accelManager) {
 	Animation * activeAnim;
 	switch (mode) {
 	case 0:
-		activeAnim = accelAnimation;
+//		activeAnim = accelAnimation;
+//		activeAnim = stableDollarAnimation;
+		activeAnim = movingDotAnimation;
 		break;
 	case 1:
 		activeAnim = rainbowAnimation;
 		break;
 	case 2:
-		activeAnim = movingDotAnimation;
+		activeAnim = fireAnimation;
 		break;
 	}
 

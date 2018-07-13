@@ -33,11 +33,14 @@ void MovingDotAnimation::step(AccelManager * accelManager) {
 
 	offset %= ledsPerStrip;
 
-	for (uint8_t vline = 0; vline < 4; vline++) {
+	int dots = 6;
+
+	for (uint8_t vline = 0; vline < dots; vline++) {
 		for (uint8_t hline = 0; hline < numStrips; hline++) {
-			int lineOffset = offset + ledsPerStrip / 4 * vline;
+			int lineOffset = offset + ledsPerStrip / dots * vline;
 			lineOffset %= ledsPerStrip;
-			int sat = (255.0 / 4.0) * (float) (numStrips - hline - 1);
+//			int sat = (255.0 / 4.0) * (float) (numStrips - hline - 1);
+			int sat = 150;
 			leds[hline * ledsPerStrip + lineOffset] = CHSV(hue + intensity, sat, 255);
 		}
 	}
