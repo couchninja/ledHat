@@ -2,6 +2,7 @@
 #include <OtaManager.h>
 #include <LedManager.h>
 #include <AccelManager.h>
+#include <ButtonManager.h>
 
 /**
  * NOTES
@@ -11,9 +12,7 @@
 OtaManager * otaManager;
 LedManager * ledManager;
 AccelManager * accelManager;
-
-// Doesn't work with every pin; maybe because of pull-up resistor
-#define BUTTON_PIN D3
+ButtonManager * buttonManager;
 
 #define MS_PER_LED_UPDATE 20
 #define MS_PER_OTA_CHECK 50
@@ -24,43 +23,28 @@ AccelManager * accelManager;
 
 long lastLedStep = 0;
 long lastOtaCheck = 0;
-bool buttonIsDown = false;
-bool buttonWasDown = false;
-
-void checkButton(){
-	buttonIsDown = !digitalRead(BUTTON_PIN);
-	if(!buttonIsDown && buttonWasDown){
-		Serial.println("Button pushed");
-		ledManager->nextMode();
-	}
-	buttonWasDown = buttonIsDown;
-
-	digitalWrite(BUILTIN_LED, buttonIsDown);
-}
 
 void setup() {
 	Serial.begin(BAUDRATE);
 	Serial.println("Booting");
 	pinMode(2, OUTPUT);
-	pinMode(BUTTON_PIN, INPUT);
+	pinMode(LedSettings::BUTTON_PIN, INPUT);
 
 	otaManager = new OtaManager();
-	// havent seen this work yet but maybe the button wiring is broken
-	while(!digitalRead(BUTTON_PIN)) {
+	// haven't seen this work yet but maybe the button wiring is broken
+	while(!digitalRead(LedSettings::BUTTON_PIN)) {
 		Serial.println("Button down at boot: check for updates");
 		otaManager->check();
 		delay(500);
-		checkButton();
 	}
 
-	// ARON new needed? is it different syntax?
 	ledManager = new LedManager(otaManager->connected);
-
 	accelManager = new AccelManager();
+	buttonManager = new ButtonManager(ledManager);
 }
 
 void loop() {
-	checkButton();
+	buttonManager->checkButton();
 
 	long now = millis();
 

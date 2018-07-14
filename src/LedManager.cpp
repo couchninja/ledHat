@@ -15,7 +15,7 @@ Animation * stableDollarAnimation = new StableDollarAnimation();
 LedManager::LedManager(bool wifiConnected) {
 	Serial.println("Initializing LedManager");
 
-	FastLED.setMaxPowerInVoltsAndMilliamps(5, 10);
+	FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);
 	FastLED.addLeds<WS2812B, D6, GRB>(leds, LedSettings::NUM_LEDS);
 
 	if (wifiConnected)
