@@ -5,13 +5,26 @@ ButtonManager::ButtonManager(LedManager * ledManager) {
 	this->ledManager = ledManager;
 }
 
-void ButtonManager::checkButton(){
+void ButtonManager::checkButton() {
 	bool buttonIsDown = !digitalRead(LedSettings::BUTTON_PIN);
-	if(!buttonIsDown && this->buttonWasDown){
+
+	if (this->buttonDownFrames > 2000) {
+		this->ledManager->enableSettingsMode();
+	}
+
+	if (!buttonIsDown && this->buttonDownFrames > 0) {
+		// button went back up
 		Serial.println("Button pushed");
 		this->ledManager->nextMode();
+	} else {
+
 	}
-	this->buttonWasDown = buttonIsDown;
+
+	if (buttonIsDown) {
+		this->buttonDownFrames++;
+	} else {
+		this->buttonDownFrames = 0;
+	}
 
 	digitalWrite(BUILTIN_LED, buttonIsDown);
 }

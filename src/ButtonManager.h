@@ -7,7 +7,7 @@
 class ButtonManager {
 public:
 	LedManager * ledManager;
-	bool buttonWasDown = false;
+	int buttonDownFrames = 0;
 
 	ButtonManager(LedManager * ledManager);
 	void checkButton();

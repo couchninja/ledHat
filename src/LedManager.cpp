@@ -12,16 +12,27 @@ Animation * rainbowAnimation = new RainbowAnimation();
 Animation * accelAnimation = new AccelAnimation();
 Animation * stableDollarAnimation = new StableDollarAnimation();
 
-LedManager::LedManager(bool wifiConnected) {
+LedManager::LedManager(int otaState) {
 	Serial.println("Initializing LedManager");
 
 	FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);
 	FastLED.addLeds<WS2812B, D6, GRB>(leds, LedSettings::NUM_LEDS);
 
-	if (wifiConnected)
+	switch (otaState) {
+	case OTA_DISABLED:
+		leds.fill_solid(CRGB(0, 0, 255));
+		break;
+	case OTA_CONNECTED:
 		leds.fill_solid(CHSV(100, 255, 100));
-	else
+		break;
+	case OTA_DISCONNECTED:
 		leds.fill_solid(CHSV(255, 255, 100));
+		break;
+	}
+//	if (wifiConnected)
+//		leds.fill_solid(CHSV(100, 255, 100));
+//	else
+//		leds.fill_solid(CHSV(255, 255, 100));
 	FastLED.show();
 
 	delay(200);
@@ -29,22 +40,28 @@ LedManager::LedManager(bool wifiConnected) {
 
 void LedManager::step(AccelManager * accelManager) {
 	Animation * activeAnim;
-	switch (mode) {
-	case 0:
-//		activeAnim = accelAnimation;
-//		activeAnim = stableDollarAnimation;
-		activeAnim = movingDotAnimation;
-		break;
-	case 1:
-		activeAnim = rainbowAnimation;
-		break;
-	case 2:
-		activeAnim = fireAnimation;
-		break;
+
+	if (this->settingsMode) {
+		activeAnim = stableDollarAnimation;
+	} else {
+		switch (mode) {
+		case 0:
+			//		activeAnim = accelAnimation;
+			//		activeAnim = stableDollarAnimation;
+			activeAnim = movingDotAnimation;
+			break;
+		case 1:
+			activeAnim = rainbowAnimation;
+			break;
+		case 2:
+			activeAnim = fireAnimation;
+			break;
+		}
 	}
 
 	activeAnim->step(accelManager);
-	memmove(&leds[0], &activeAnim->leds[0], LedSettings::NUM_LEDS * sizeof(CRGB));
+	memmove(&leds[0], &activeAnim->leds[0],
+			LedSettings::NUM_LEDS * sizeof(CRGB));
 
 	FastLED.show();
 }
@@ -52,6 +69,10 @@ void LedManager::step(AccelManager * accelManager) {
 void LedManager::nextMode() {
 	mode++;
 	mode %= NUM_MODES
+}
+
+void LedManager::enableSettingsMode() {
+	this->settingsMode = true;
 }
 
 LedManager::~LedManager() {

@@ -1,6 +1,14 @@
 #include <OtaManager.h>
 
-OtaManager::OtaManager() {
+OtaManager::OtaManager(bool connect) {
+	if(!connect) {
+		this->state = OTA_DISABLED;
+		WiFi.mode(WIFI_OFF);
+		return;
+	}
+
+	this->state = OTA_DISCONNECTED;
+
 	Serial.println("OtaManager started");
 	WiFi.mode(WIFI_STA);
 	WiFi.begin(WifiCredentials::ssid, WifiCredentials::password);
@@ -12,7 +20,7 @@ OtaManager::OtaManager() {
 		return;
 	}
 
-	connected = true;
+	this->state = OTA_CONNECTED;
 
 	ArduinoOTA.onStart([]() {
 		Serial.println("Start updating ");

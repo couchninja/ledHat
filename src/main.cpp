@@ -30,7 +30,7 @@ void setup() {
 	pinMode(2, OUTPUT);
 	pinMode(LedSettings::BUTTON_PIN, INPUT);
 
-	otaManager = new OtaManager();
+	otaManager = new OtaManager(true);
 	// haven't seen this work yet but maybe the button wiring is broken
 	while(!digitalRead(LedSettings::BUTTON_PIN)) {
 		Serial.println("Button down at boot: check for updates");
@@ -38,7 +38,7 @@ void setup() {
 		delay(500);
 	}
 
-	ledManager = new LedManager(otaManager->connected);
+	ledManager = new LedManager(otaManager->state);
 	accelManager = new AccelManager();
 	buttonManager = new ButtonManager(ledManager);
 }

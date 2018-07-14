@@ -7,9 +7,11 @@
 // - https://github.com/FastLED/FastLED/issues/306
 // - https://github.com/FastLED/FastLED/issues/337
 #define FASTLED_ALLOW_INTERRUPTS 0
+
 #include <FastLED.h>
 #include<settings/ledSettings.h>
 #include<AccelManager.h>
+#include<OtaManager.h>
 #include<animation/AccelAnimation.h>
 #include<animation/FireAnimation.h>
 #include<animation/HorizonAnimation.h>
@@ -19,7 +21,8 @@
 
 class LedManager {
 public:
-	LedManager(bool wifiConnected);
+	bool settingsMode = false;
+	LedManager(int otaState);
 	void surfaceStep(AccelManager * accelManager);
 	void rainbow1Step(float intensity);
 	void rainbow2Step(AccelManager * accelManager);
@@ -27,6 +30,7 @@ public:
 	void fillRed();
 	void step(AccelManager * accelManager);
 	void nextMode();
+	void enableSettingsMode();
 	virtual ~LedManager();
 };
 
