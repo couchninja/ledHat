@@ -1,10 +1,10 @@
 #include <animation/RainbowAnimation.h>
 
-RainbowAnimation::RainbowAnimation() :
-		Animation() {
+RainbowAnimation::RainbowAnimation(AccelManager * accelManager) :
+		Animation(accelManager) {
 }
 
-void RainbowAnimation::step(AccelManager * accelManager) {
+void RainbowAnimation::step() {
 	float intensity = 1.0;
 
 	static uint8_t j = 0;

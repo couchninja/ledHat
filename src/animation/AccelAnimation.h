@@ -5,8 +5,8 @@
 
 class AccelAnimation: public Animation {
 public:
-	AccelAnimation();
-	void step(AccelManager * accelManager);
+	AccelAnimation(AccelManager * accelManager);
+	void step();
 	virtual ~AccelAnimation();
 };
 

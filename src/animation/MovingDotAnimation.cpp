@@ -7,11 +7,11 @@ uint8_t offset;
 
 int idleCounter2 = 0;
 
-MovingDotAnimation::MovingDotAnimation() :
-		Animation() {
+MovingDotAnimation::MovingDotAnimation(AccelManager * accelManager) :
+				Animation(accelManager) {
 }
 
-void MovingDotAnimation::step(AccelManager * accelManager) {
+void MovingDotAnimation::step() {
 	leds.fadeToBlackBy(80);
 	leds.blur1d(200);
 

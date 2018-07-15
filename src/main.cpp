@@ -16,6 +16,7 @@ ButtonManager * buttonManager;
 
 #define MS_PER_LED_UPDATE 20
 #define MS_PER_OTA_CHECK 50
+#define MS_PER_BUTTON_CHECK 50
 
 // read serial output with:
 //    pio -f -c eclipse device monitor --baud 9600
@@ -23,6 +24,9 @@ ButtonManager * buttonManager;
 
 long lastLedStep = 0;
 long lastOtaCheck = 0;
+long lastButtonCheck = 0;
+
+long steps = 0;
 
 void setup() {
 	Serial.begin(BAUDRATE);
@@ -32,21 +36,25 @@ void setup() {
 
 	otaManager = new OtaManager(true);
 	// haven't seen this work yet but maybe the button wiring is broken
-	while(!digitalRead(LedSettings::BUTTON_PIN)) {
+	while (!digitalRead(LedSettings::BUTTON_PIN)) {
 		Serial.println("Button down at boot: check for updates");
 		otaManager->check();
 		delay(500);
 	}
 
-	ledManager = new LedManager(otaManager->state);
 	accelManager = new AccelManager();
+	ledManager = new LedManager(otaManager->state, accelManager);
 	buttonManager = new ButtonManager(ledManager);
 }
 
 void loop() {
-	buttonManager->checkButton();
-
 	long now = millis();
+
+	// the button state is a bit jittery with on/off, so only check with intervals
+	if (now - lastButtonCheck > MS_PER_BUTTON_CHECK) {
+		buttonManager->checkButton();
+		lastButtonCheck = now;
+	}
 
 	accelManager->step();
 
@@ -57,8 +65,10 @@ void loop() {
 
 	// this does not catch up if missing a frame
 	if (now - lastLedStep > MS_PER_OTA_CHECK) {
-		ledManager->step(accelManager);
+		ledManager->step();
 		lastLedStep = now;
 	}
+
+	steps++;
 }
 

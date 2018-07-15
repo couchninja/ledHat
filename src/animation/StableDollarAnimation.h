@@ -5,8 +5,8 @@
 
 class StableDollarAnimation: public Animation {
 public:
-	StableDollarAnimation();
-	void step(AccelManager * accelManager);
+	StableDollarAnimation(AccelManager * accelManager);
+	void step();
 
 	virtual ~StableDollarAnimation();
 };

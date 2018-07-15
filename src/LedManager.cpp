@@ -5,18 +5,21 @@ CRGBArray<LedSettings::NUM_LEDS> leds;
 #define NUM_MODES 3;
 int mode = 0;
 
-Animation * horizonAnimation = new HorizonAnimation();
-Animation * fireAnimation = new FireAnimation();
-Animation * movingDotAnimation = new MovingDotAnimation();
-Animation * rainbowAnimation = new RainbowAnimation();
-Animation * accelAnimation = new AccelAnimation();
-Animation * stableDollarAnimation = new StableDollarAnimation();
-
-LedManager::LedManager(int otaState) {
+LedManager::LedManager(int otaState, AccelManager * accelManager) {
 	Serial.println("Initializing LedManager");
+	this->accelManager = accelManager;
 
-	FastLED.setMaxPowerInVoltsAndMilliamps(5, 500);
+	FastLED.setMaxPowerInVoltsAndMilliamps(5, 50);
 	FastLED.addLeds<WS2812B, D6, GRB>(leds, LedSettings::NUM_LEDS);
+
+	this->horizonAnimation = new HorizonAnimation(accelManager);
+	this->fireAnimation = new FireAnimation(accelManager);
+	this->movingDotAnimation = new MovingDotAnimation(accelManager);
+	this->rainbowAnimation = new RainbowAnimation(accelManager);
+	this->accelAnimation = new AccelAnimation(accelManager);
+	this->stableDollarAnimation = new StableDollarAnimation(accelManager);
+	this->brightnessSettingsAnimation = new BrightnessSettingsAnimation(
+			accelManager);
 
 	switch (otaState) {
 	case OTA_DISABLED:
@@ -29,20 +32,17 @@ LedManager::LedManager(int otaState) {
 		leds.fill_solid(CHSV(255, 255, 100));
 		break;
 	}
-//	if (wifiConnected)
-//		leds.fill_solid(CHSV(100, 255, 100));
-//	else
-//		leds.fill_solid(CHSV(255, 255, 100));
+
 	FastLED.show();
 
 	delay(200);
 }
 
-void LedManager::step(AccelManager * accelManager) {
+void LedManager::step() {
 	Animation * activeAnim;
 
 	if (this->settingsMode) {
-		activeAnim = stableDollarAnimation;
+		activeAnim = brightnessSettingsAnimation;
 	} else {
 		switch (mode) {
 		case 0:
@@ -59,20 +59,24 @@ void LedManager::step(AccelManager * accelManager) {
 		}
 	}
 
-	activeAnim->step(accelManager);
-	memmove(&leds[0], &activeAnim->leds[0],
-			LedSettings::NUM_LEDS * sizeof(CRGB));
+	activeAnim->step();
+	memmove(&leds[0], &activeAnim->leds[0], LedSettings::NUM_LEDS * sizeof(CRGB));
 
 	FastLED.show();
 }
 
-void LedManager::nextMode() {
-	mode++;
-	mode %= NUM_MODES
+void LedManager::handleClick() {
+	if (this->settingsMode) {
+		Serial.println("send click to brightnessSettingsAnimation");
+		this->brightnessSettingsAnimation->handleClick();
+	} else {
+		mode++;
+		mode %= NUM_MODES
+	}
 }
 
-void LedManager::enableSettingsMode() {
-	this->settingsMode = true;
+void LedManager::handleLongPress() {
+	this->settingsMode = !this->settingsMode;
 }
 
 LedManager::~LedManager() {

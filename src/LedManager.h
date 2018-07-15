@@ -18,19 +18,26 @@
 #include<animation/MovingDotAnimation.h>
 #include<animation/RainbowAnimation.h>
 #include<animation/StableDollarAnimation.h>
+#include<animation/BrightnessSettingsAnimation.h>
 
 class LedManager {
 public:
 	bool settingsMode = false;
-	LedManager(int otaState);
-	void surfaceStep(AccelManager * accelManager);
-	void rainbow1Step(float intensity);
-	void rainbow2Step(AccelManager * accelManager);
-	void rainbow3Step(AccelManager * accelManager);
+	AccelManager * accelManager;
+
+	Animation * horizonAnimation;
+	Animation * fireAnimation;
+	Animation * movingDotAnimation;
+	Animation * rainbowAnimation;
+	Animation * accelAnimation;
+	Animation * stableDollarAnimation;
+	Animation * brightnessSettingsAnimation;
+
+	LedManager(int otaState, AccelManager * accelManager);
 	void fillRed();
-	void step(AccelManager * accelManager);
-	void nextMode();
-	void enableSettingsMode();
+	void step();
+	void handleClick();
+	void handleLongPress();
 	virtual ~LedManager();
 };
 

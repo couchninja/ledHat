@@ -5,8 +5,8 @@
 
 class MovingDotAnimation: public Animation {
 public:
-	MovingDotAnimation();
-	void step(AccelManager * accelManager);
+	MovingDotAnimation(AccelManager * accelManager);
+	void step();
 	virtual ~MovingDotAnimation();
 };
 

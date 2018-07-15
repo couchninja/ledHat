@@ -5,8 +5,8 @@
 
 class HorizonAnimation: public Animation {
 public:
-	HorizonAnimation();
-	void step(AccelManager * accelManager);
+	HorizonAnimation(AccelManager * accelManager);
+	void step();
 	virtual ~HorizonAnimation();
 };
 

@@ -5,8 +5,8 @@
 
 class RainbowAnimation: public Animation {
 public:
-	RainbowAnimation();
-	void step(AccelManager * accelManager);
+	RainbowAnimation(AccelManager * accelManager);
+	void step();
 	virtual ~RainbowAnimation();
 };
 

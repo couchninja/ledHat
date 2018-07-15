@@ -21,15 +21,15 @@
 CRGBPalette16 gPal = HeatColors_p;
 bool gReverseDirection = false;
 
-FireAnimation::FireAnimation() :
-		Animation() {
+FireAnimation::FireAnimation(AccelManager * accelManager) :
+				Animation(accelManager) {
 	// Add entropy to random number generator; we use a lot of it.
   // random16_add_entropy( random());
 
 	heat = new byte[numLeds];
 }
 
-void FireAnimation::step(AccelManager * accelManager) {
+void FireAnimation::step() {
 	counter++;
 	// skip some frames
 	if (counter % 1 == 0) {

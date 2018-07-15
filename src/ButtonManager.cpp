@@ -8,23 +8,29 @@ ButtonManager::ButtonManager(LedManager * ledManager) {
 void ButtonManager::checkButton() {
 	bool buttonIsDown = !digitalRead(LedSettings::BUTTON_PIN);
 
-	if (this->buttonDownFrames > 2000) {
-		this->ledManager->enableSettingsMode();
+	if (!ignoreEverythingUntilNextUp
+			&& this->buttonDownTimestamp != -1
+			&& (millis() - this->buttonDownTimestamp) > 2000) {
+		// long press
+		ledManager->handleLongPress();
+		ignoreEverythingUntilNextUp = true;
 	}
 
-	if (!buttonIsDown && this->buttonDownFrames > 0) {
-		// button went back up
-		Serial.println("Button pushed");
-		this->ledManager->nextMode();
-	} else {
-
+	if (buttonIsDown != buttonWasDown) {
+		if (buttonIsDown) {
+			this->buttonDownTimestamp = millis();
+		} else {
+			if (!ignoreEverythingUntilNextUp) {
+				// button went back up
+				Serial.println("Button pushed");
+				this->ledManager->handleClick();
+			}
+			this->buttonDownTimestamp = -1;
+			ignoreEverythingUntilNextUp = false;
+		}
 	}
 
-	if (buttonIsDown) {
-		this->buttonDownFrames++;
-	} else {
-		this->buttonDownFrames = 0;
-	}
+	buttonWasDown = buttonIsDown;
 
 	digitalWrite(BUILTIN_LED, buttonIsDown);
 }

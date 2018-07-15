@@ -1,10 +1,10 @@
 #include <animation/StableDollarAnimation.h>
 
-StableDollarAnimation::StableDollarAnimation() :
-		Animation() {
+StableDollarAnimation::StableDollarAnimation(AccelManager * accelManager) :
+		Animation(accelManager) {
 }
 
-void StableDollarAnimation::step(AccelManager * accelManager) {
+void StableDollarAnimation::step() {
 	leds.fadeToBlackBy(150);
 //	leds.blur1d(64);
 

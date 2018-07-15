@@ -7,7 +7,9 @@
 class ButtonManager {
 public:
 	LedManager * ledManager;
-	int buttonDownFrames = 0;
+	bool buttonWasDown = false;
+	int buttonDownTimestamp = -1;
+	boolean ignoreEverythingUntilNextUp = false;
 
 	ButtonManager(LedManager * ledManager);
 	void checkButton();

@@ -1,6 +1,11 @@
 #include <animation/Animation.h>
 
-Animation::Animation() {
+Animation::Animation(AccelManager * accelManager) {
+	this->accelManager = accelManager;
+}
+
+void Animation::handleClick() {
+	Serial.println("Animation::handleClick");
 }
 
 /**

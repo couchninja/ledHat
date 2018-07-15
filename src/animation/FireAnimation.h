@@ -9,8 +9,8 @@ public:
 	byte * heat;
 	int counter = 0;
 
-	FireAnimation();
-	void step(AccelManager * accelManager);
+	FireAnimation(AccelManager * accelManager);
+	void step();
 	virtual ~FireAnimation();
 };
 

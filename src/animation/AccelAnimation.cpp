@@ -19,12 +19,13 @@ int idleCounter = 0;
 uint8_t dotsHue;
 uint8_t dotsOffset;
 
-AccelAnimation::AccelAnimation() {
+AccelAnimation::AccelAnimation(AccelManager * accelManager) :
+		Animation(accelManager) {
 	CRGBPalette16 gPal = HeatColors_p;
 	heat = new byte[numLeds];
 }
+void AccelAnimation::step() {
 
-void AccelAnimation::step(AccelManager * accelManager) {
 //	leds.fadeToBlackBy(220);
 //	leds.blur1d(64);
 
@@ -136,27 +137,28 @@ void AccelAnimation::step(AccelManager * accelManager) {
 //	}
 
 	if (idleCounter > 10) {
-			float alpha = _min(1, (idleCounter - 10) / 100.0);
+		float alpha = _min(1, (idleCounter - 10) / 100.0);
 
-			// normalize to 0 ... 1 (not sure about inclusive/exclusive)
-				float pitchNormalized = (accelManager->ypr[2] + M_PI / 2) / (M_PI);
-				dotsOffset = pitchNormalized * ledsPerStrip;
+		// normalize to 0 ... 1 (not sure about inclusive/exclusive)
+		float pitchNormalized = (accelManager->ypr[2] + M_PI / 2) / (M_PI);
+		dotsOffset = pitchNormalized * ledsPerStrip;
 
-				dotsOffset %= ledsPerStrip;
+		dotsOffset %= ledsPerStrip;
 
-				for (uint8_t vline = 0; vline < 4; vline++) {
-					for (uint8_t hline = 0; hline < numStrips; hline++) {
-						int lineOffset = dotsOffset + ledsPerStrip / 4 * vline;
-						lineOffset %= ledsPerStrip;
-						int sat = (255.0 / 4.0) * (float) (numStrips - hline - 1);
-						leds[hline * ledsPerStrip + lineOffset] = CHSV(dotsHue + intensity, sat, alpha);
-					}
-				}
-				leds.blur1d(200);
-
-				// update vars
-				dotsHue++;
+		for (uint8_t vline = 0; vline < 4; vline++) {
+			for (uint8_t hline = 0; hline < numStrips; hline++) {
+				int lineOffset = dotsOffset + ledsPerStrip / 4 * vline;
+				lineOffset %= ledsPerStrip;
+				int sat = (255.0 / 4.0) * (float) (numStrips - hline - 1);
+				leds[hline * ledsPerStrip + lineOffset] = CHSV(dotsHue + intensity, sat,
+						alpha);
+			}
 		}
+		leds.blur1d(200);
+
+		// update vars
+		dotsHue++;
+	}
 }
 
 AccelAnimation::~AccelAnimation() {

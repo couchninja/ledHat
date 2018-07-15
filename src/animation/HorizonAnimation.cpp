@@ -1,11 +1,10 @@
 #include <animation/HorizonAnimation.h>
 
-HorizonAnimation::HorizonAnimation() :
-		Animation() {
+HorizonAnimation::HorizonAnimation(AccelManager * accelManager) :
+Animation(accelManager) {
 }
 
-//void Animation::step(AccelManager * accelManager) {
-void HorizonAnimation::step(AccelManager * accelManager) {
+void HorizonAnimation::step() {
 	leds.fadeToBlackBy(80);
 
 	// from -1 (backside down) to +1 (frontside down)
