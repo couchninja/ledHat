@@ -3,6 +3,7 @@
 
 class WifiCredentials {
 public:
+	/* Note! It seems that the OtaManager needs to be rebuilt before these changes are picked up. */
 	static constexpr const char* ssid = "";
 	static constexpr const char* password = "";
 };
