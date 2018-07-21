@@ -1,7 +1,7 @@
 #include <animation/DebugAnimation.h>
 #include <numeric>
 
-VectorFloat gravHatLast = VectorFloat();
+Vector3D gravHatLast = Vector3D();
 //std::deque<VectorFloat> gravHatLog = std::deque<VectorFloat>();
 
 DebugAnimation::DebugAnimation(AccelManager * accelManager) :
@@ -183,16 +183,17 @@ void DebugAnimation::step() {
 
 	///// GRAVHAT
 
-	VectorFloat gravSensorDelta = Vector3D(accelManager->rollingGravityDelta);
-	VectorFloat gravHat = grav2hat(VectorFloat(accelManager->gravity.x,
-			accelManager->gravity.y,
-			accelManager->gravity.z));
-//	VectorFloat gravHatDelta = grav2hat(gravSensorDelta);
-	VectorFloat gravHatDelta = VectorFloat(
-			gravHatLast.x - gravHat.x,
-			gravHatLast.y - gravHat.y,
-			gravHatLast.z - gravHat.z
-			);
+	Vector3D gravSensorDelta = Vector3D(accelManager->rollingGravityDelta);
+	VectorFloat gravHatDelta = grav2hat(gravSensorDelta);
+
+//	VectorFloat gravHat = grav2hat(Vector3D(accelManager->gravity.x,
+//			accelManager->gravity.y,
+//			accelManager->gravity.z));
+//	VectorFloat gravHatDelta = Vector3D(
+//			gravHatLast.x - gravHat.x,
+//			gravHatLast.y - gravHat.y,
+//			gravHatLast.z - gravHat.z
+//			);
 	gravHatDelta.normalize();
 
 	for (float i = 0; i < LedSettings::LEDS_PER_STRIP; i++) {
@@ -258,7 +259,7 @@ void DebugAnimation::step() {
 //	if(gravHatLog.size() > 10) {
 //		gravHatLog.pop_front();
 //	}
-	gravHatLast = gravHat;
+//	gravHatLast = gravHat;
 }
 
 float DebugAnimation::dotProduct(VectorFloat v1, VectorFloat v2) {

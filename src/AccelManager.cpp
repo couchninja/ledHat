@@ -286,10 +286,8 @@ void AccelManager::step() {
 
 		/// rolling gravity calculations
 
-		rollingGravity.mix(gravity, 1.0);
-		rollingGravityDelta = Vector3D(lastRollingGravity);
-		rollingGravityDelta.sub(rollingGravity);
-
+		rollingGravity.mix(gravity, 0.1);
+		rollingGravityDelta = lastRollingGravity - rollingGravity;
 		lastRollingGravity = rollingGravity;
 	}
 }

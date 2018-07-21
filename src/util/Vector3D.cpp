@@ -28,18 +28,18 @@ void Vector3D::mix(Vector3D other, float otherFrac) {
 }
 
 void Vector3D::sub(Vector3D other) {
-	x = other.x;
-	y = other.y;
-	z = other.z;
+	x -= other.x;
+	y -= other.y;
+	z -= other.z;
 }
 
-//Vector3D Vector3D::operator-(const Vector3D& b) {
-//         Vector3D vector3d;
-//         vector3d.x = x - b.x;
-//         vector3d.y = y - b.y;
-//         vector3d.z = z - b.z;
-//         return vector3d;
-//      }
+Vector3D Vector3D::operator-(const Vector3D& b) {
+         Vector3D vector3d;
+         vector3d.x = x - b.x;
+         vector3d.y = y - b.y;
+         vector3d.z = z - b.z;
+         return vector3d;
+      }
 
 Vector3D::~Vector3D()
 {

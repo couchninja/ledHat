@@ -15,7 +15,7 @@ public:
 
 	void mix(Vector3D other, float otherFrac);
 	void sub(Vector3D other);
-//	Vector3D operator-(const Vector3D& b);
+	Vector3D operator-(const Vector3D& b);
 };
 
 #endif /* SRC_UTIL_VECTOR3D_H_ */
