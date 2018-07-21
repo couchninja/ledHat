@@ -96,7 +96,8 @@ AccelManager::AccelManager() {
 	Serial.println(F("Testing device connections..."));
 	Serial.println(
 			mpu.testConnection() ?
-					F("MPU6050 connection successful") : F("MPU6050 connection failed"));
+															F("MPU6050 connection successful") :
+															F("MPU6050 connection failed"));
 
 	// not sure if this is needed
 	while (Serial.available() && Serial.read())
@@ -249,20 +250,15 @@ void AccelManager::step() {
 		Serial.println(aaWorld.z);
 #endif
 
+		/// AA real average calculations
+
 		smoothAaReal.x = lastAaReal.x * 0.2 + aaReal.x * 0.8;
 		smoothAaReal.y = lastAaReal.y * 0.2 + aaReal.y * 0.8;
 		smoothAaReal.z = lastAaReal.z * 0.2 + aaReal.z * 0.8;
 
-		float diff = abs(lastAaReal.x - aaReal.x) + abs(lastAaReal.y - aaReal.y)
+		float diff = abs(lastAaReal.x - aaReal.x)
+				+ abs(lastAaReal.y - aaReal.y)
 				+ abs(lastAaReal.z - aaReal.z);
-
-//		if ((aaReal.x > 0 && lastAaReal.x < 0) || (aaReal.x < 0 && lastAaReal.x > 0)
-//				|| (aaReal.y > 0 && lastAaReal.y < 0)
-//				|| (aaReal.y < 0 && lastAaReal.y > 0)
-//				|| (aaReal.z > 0 && lastAaReal.z < 0)
-//				|| (aaReal.z < 0 && lastAaReal.z > 0)) {
-//			motionTriggered = true;
-//		}
 
 		if ((smoothAaReal.x > 0 && lastSmoothAaReal.x < 0)
 				|| (smoothAaReal.x < 0 && lastSmoothAaReal.x > 0)
@@ -274,22 +270,11 @@ void AccelManager::step() {
 			motionTriggered = true;
 		}
 
-		rollingDiff = rollingDiff * 0.8 + diff * 0.2;
-		rollingMaxDiff *= 0.99;
+		rollingAARealDiff = rollingAARealDiff * 0.8 + diff * 0.2;
+		rollingMaxAARealDiff *= 0.99;
 
-//		if(rollingDiff > rollingMaxDiff) {
-//			motionTriggered = true;
-//		}
-
-		rollingMaxDiff = _max(rollingDiff, rollingMaxDiff);
-//		Serial.println(rollingMaxDiff);
-		rollingMaxDiff = _max(400.0, rollingMaxDiff);
-
-//		if (rollingMaxDiff / rollingDiff > 0.8) {
-//			motionTriggered = true;
-//		}
-
-//		Serial.println(rollingMaxDiff);
+		rollingMaxAARealDiff = _max(rollingAARealDiff, rollingMaxAARealDiff);
+		rollingMaxAARealDiff = _max(400.0, rollingMaxAARealDiff);
 
 		lastAaReal.x = aaReal.x;
 		lastAaReal.y = aaReal.y;
@@ -299,7 +284,13 @@ void AccelManager::step() {
 		lastSmoothAaReal.y = smoothAaReal.y;
 		lastSmoothAaReal.z = smoothAaReal.z;
 
-//		rollingDiff *= 0.2;
+		/// rolling gravity calculations
+
+		rollingGravity.mix(gravity, 1.0);
+		rollingGravityDelta = Vector3D(lastRollingGravity);
+		rollingGravityDelta.sub(rollingGravity);
+
+		lastRollingGravity = rollingGravity;
 	}
 }
 

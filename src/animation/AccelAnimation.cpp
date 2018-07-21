@@ -30,7 +30,7 @@ void AccelAnimation::step() {
 //	leds.blur1d(64);
 
 // scaled to approx 0...255
-	float intensity = accelManager->rollingDiff / accelManager->rollingMaxDiff
+	float intensity = accelManager->rollingAARealDiff / accelManager->rollingMaxAARealDiff
 			* 255; // * (numStrips - 1);
 	// high intensity if little movement
 //	float intensity = (rollingMaxDiff - rollingDiff)/rollingMaxDiff * 255; // * (numStrips - 1);

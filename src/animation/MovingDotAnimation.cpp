@@ -16,7 +16,7 @@ void MovingDotAnimation::step() {
 	leds.blur1d(200);
 
 	// scaled to approx 0...255
-	float intensity = accelManager->rollingDiff / accelManager->rollingMaxDiff * 255; // * (numStrips - 1);
+	float intensity = accelManager->rollingAARealDiff / accelManager->rollingMaxAARealDiff * 255; // * (numStrips - 1);
 
 	if (intensity < 230) {
 			intensity = 0;

@@ -11,6 +11,7 @@
 #include "I2Cdev.h"
 
 #include "helper_3dmath.h"
+#include <util/Vector3D.h>
 
 class AccelManager {
 public:
@@ -24,15 +25,20 @@ public:
 	// [x, y, z] world-frame accel sensor measurements
 	VectorInt16 aaWorld;
 	// [x, y, z] gravity vector
-	VectorFloat gravity;
+	Vector3D gravity;
 	// [psi, theta, phi] Euler angle container
 	float euler[3];
 	// [yaw, pitch, roll] yaw/pitch/roll container and gravity vector
 	float ypr[3];
 
-	// ARON
-	float rollingDiff = 0;
-	float rollingMaxDiff = 0;
+
+	float rollingAARealDiff = 0;
+	float rollingMaxAARealDiff = 0;
+
+	Vector3D rollingGravity = Vector3D();
+	Vector3D lastRollingGravity = Vector3D();
+	Vector3D rollingGravityDelta= Vector3D();
+
 	bool motionTriggered = false;
 	bool consumeMotionTriggered();
 
