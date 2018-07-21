@@ -18,10 +18,10 @@ void BrightnessSettingsAnimation::handleClick() {
 	Serial.println(this->brightnessIndex);
 
 	brightnessIndex++;
-	// ARON use vector?
+
 	brightnessIndex = this->brightnessIndex % 5;
 
-//	FastLED.setMaxPowerInVoltsAndMilliamps(5, brightnesses[brightnessIndex]);
+	FastLED.setMaxPowerInVoltsAndMilliamps(5, brightnesses[brightnessIndex]);
 }
 
 BrightnessSettingsAnimation::~BrightnessSettingsAnimation() {

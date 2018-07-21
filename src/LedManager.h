@@ -12,26 +12,26 @@
 #include<settings/ledSettings.h>
 #include<AccelManager.h>
 #include<OtaManager.h>
+#include<vector>
 #include<animation/AccelAnimation.h>
+#include<animation/BrightnessSettingsAnimation.h>
+#include<animation/DebugAnimation.h>
 #include<animation/FireAnimation.h>
 #include<animation/HorizonAnimation.h>
 #include<animation/MovingDotAnimation.h>
 #include<animation/RainbowAnimation.h>
 #include<animation/StableDollarAnimation.h>
-#include<animation/BrightnessSettingsAnimation.h>
+
+using namespace std;
 
 class LedManager {
 public:
 	bool settingsMode = false;
 	AccelManager * accelManager;
 
-	Animation * horizonAnimation;
-	Animation * fireAnimation;
-	Animation * movingDotAnimation;
-	Animation * rainbowAnimation;
-	Animation * accelAnimation;
-	Animation * stableDollarAnimation;
+	int mode = 0;
 	Animation * brightnessSettingsAnimation;
+	vector<Animation*> animations;
 
 	LedManager(int otaState, AccelManager * accelManager);
 	void fillRed();

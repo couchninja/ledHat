@@ -2,9 +2,6 @@
 
 CRGBArray<LedSettings::NUM_LEDS> leds;
 
-#define NUM_MODES 3;
-int mode = 0;
-
 LedManager::LedManager(int otaState, AccelManager * accelManager) {
 	Serial.println("Initializing LedManager");
 	this->accelManager = accelManager;
@@ -12,14 +9,14 @@ LedManager::LedManager(int otaState, AccelManager * accelManager) {
 	FastLED.setMaxPowerInVoltsAndMilliamps(5, 50);
 	FastLED.addLeds<WS2812B, D6, GRB>(leds, LedSettings::NUM_LEDS);
 
-	this->horizonAnimation = new HorizonAnimation(accelManager);
-	this->fireAnimation = new FireAnimation(accelManager);
-	this->movingDotAnimation = new MovingDotAnimation(accelManager);
-	this->rainbowAnimation = new RainbowAnimation(accelManager);
-	this->accelAnimation = new AccelAnimation(accelManager);
-	this->stableDollarAnimation = new StableDollarAnimation(accelManager);
 	this->brightnessSettingsAnimation = new BrightnessSettingsAnimation(
 			accelManager);
+	this->animations = vector<Animation*>();
+
+	this->animations.push_back(new DebugAnimation(accelManager));
+	this->animations.push_back(new MovingDotAnimation(accelManager));
+	this->animations.push_back(new RainbowAnimation(accelManager));
+	this->animations.push_back(new FireAnimation(accelManager));
 
 	switch (otaState) {
 	case OTA_DISABLED:
@@ -44,19 +41,7 @@ void LedManager::step() {
 	if (this->settingsMode) {
 		activeAnim = brightnessSettingsAnimation;
 	} else {
-		switch (mode) {
-		case 0:
-			//		activeAnim = accelAnimation;
-			//		activeAnim = stableDollarAnimation;
-			activeAnim = movingDotAnimation;
-			break;
-		case 1:
-			activeAnim = rainbowAnimation;
-			break;
-		case 2:
-			activeAnim = fireAnimation;
-			break;
-		}
+		activeAnim = animations[mode];
 	}
 
 	activeAnim->step();
@@ -71,7 +56,7 @@ void LedManager::handleClick() {
 		this->brightnessSettingsAnimation->handleClick();
 	} else {
 		mode++;
-		mode %= NUM_MODES
+		mode %= animations.size();
 	}
 }
 
@@ -80,5 +65,7 @@ void LedManager::handleLongPress() {
 }
 
 LedManager::~LedManager() {
-	delete horizonAnimation;
+	for(int i= 0; i< animations.size(); i++) {
+		delete animations[i];
+	}
 }
