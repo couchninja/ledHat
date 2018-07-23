@@ -45,6 +45,10 @@ float Vector3D::dot(Vector3D other) {
 	return x * other.x + y * other.y + z * other.z;
 }
 
+String Vector3D::toString() {
+	return String("x ") + x + " y " + y + " z " + z;
+}
+
 Vector3D::~Vector3D()
 {
 }

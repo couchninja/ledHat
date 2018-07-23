@@ -7,6 +7,8 @@
 class GravAnimation: public Animation {
 public:
 	Vector3D gravHatLast = Vector3D();
+	int hue = 0;
+	int idleCounter = 0;
 
 	GravAnimation(AccelManager * accelManager);
 	void step();

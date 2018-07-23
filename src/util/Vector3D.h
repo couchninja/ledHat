@@ -1,10 +1,11 @@
 #ifndef SRC_UTIL_VECTOR3D_H_
 #define SRC_UTIL_VECTOR3D_H_
 
-// neede
+// needed to subclass VectorFloat
 #include<math.h>
 #include<stdint.h>
 #include "helper_3dmath.h"
+#include<WString.h>
 
 class Vector3D: public VectorFloat {
 public:
@@ -16,6 +17,7 @@ public:
 	void mix(Vector3D other, float otherFrac);
 	void sub(Vector3D other);
 	float dot(Vector3D other);
+	String toString();
 	Vector3D operator-(const Vector3D& b);
 };
 

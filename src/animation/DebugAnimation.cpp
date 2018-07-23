@@ -1,8 +1,5 @@
 #include <animation/DebugAnimation.h>
-#include <numeric>
 
-
-//std::deque<VectorFloat> gravHatLog = std::deque<VectorFloat>();
 
 DebugAnimation::DebugAnimation(AccelManager * accelManager) :
 		Animation(accelManager) {
@@ -46,8 +43,8 @@ void DebugAnimation::step() {
 
 	leds.fill_solid(CRGB(0, 0, 0));
 
-	Serial.println(
-			String("x ") + accelManager->gravity.x + " y " + accelManager->gravity.y + " z " + accelManager->gravity.z);
+//	Serial.println(
+//			String("x ") + accelManager->gravity.x + " y " + accelManager->gravity.y + " z " + accelManager->gravity.z);
 
 //	Serial.println("start loop");
 
@@ -251,8 +248,8 @@ void DebugAnimation::step() {
 
 		//		leds[i] = CHSV(0, 255, (256 * similarity));
 
-		//		Serial.println(
-		//				String("x ") + ledCoord.x + " y " + ledCoord.y + " z " + ledCoord.z);
+				Serial.println(
+						String("x ") + ledCoord.x + " y " + ledCoord.y + " z " + ledCoord.z);
 	}
 
 //	gravHatLog.push_back(gravHat);
