@@ -1,7 +1,7 @@
 #include <animation/DebugAnimation.h>
 #include <numeric>
 
-Vector3D gravHatLast = Vector3D();
+
 //std::deque<VectorFloat> gravHatLog = std::deque<VectorFloat>();
 
 DebugAnimation::DebugAnimation(AccelManager * accelManager) :
@@ -184,7 +184,7 @@ void DebugAnimation::step() {
 	///// GRAVHAT
 
 	Vector3D gravSensorDelta = Vector3D(accelManager->rollingGravityDelta);
-	VectorFloat gravHatDelta = grav2hat(gravSensorDelta);
+	Vector3D gravHatDelta = grav2hat(gravSensorDelta);
 
 //	VectorFloat gravHat = grav2hat(Vector3D(accelManager->gravity.x,
 //			accelManager->gravity.y,
@@ -216,7 +216,7 @@ void DebugAnimation::step() {
 		ledCoord.x = cos(angle);
 		ledCoord.y = sin(angle);
 
-		float gravSim = max(0.f, dotProduct(gravHatDelta, ledCoord) - 0.5f);
+		float gravSim = max(0.f, gravHatDelta.dot(ledCoord) - 0.5f);
 
 		CHSV r = CHSV(0, 255, (gravSim) * 256);
 		CHSV g = CHSV(85, 255, (gravSim) * 256);
@@ -261,30 +261,6 @@ void DebugAnimation::step() {
 //	}
 //	gravHatLast = gravHat;
 }
-
-float DebugAnimation::dotProduct(VectorFloat v1, VectorFloat v2) {
-	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-
-//	std::inner_product();
-}
-
-VectorFloat DebugAnimation::accel2hat(VectorFloat v) {
-	return VectorFloat(v.y, -v.z, -v.x);
-}
-
-VectorFloat DebugAnimation::hat2accel(VectorFloat v) {
-	return VectorFloat(-v.z, v.x, -v.y);
-}
-
-VectorFloat DebugAnimation::grav2hat(VectorFloat v) {
-	return VectorFloat(v.y, v.z, -v.x);
-}
-
-VectorFloat DebugAnimation::hat2grav(VectorFloat v) {
-	return VectorFloat(-v.z, v.x, v.y);
-}
-
-//DebugAnimation::
 
 DebugAnimation::~DebugAnimation() {
 }

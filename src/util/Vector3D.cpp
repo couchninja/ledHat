@@ -41,8 +41,11 @@ Vector3D Vector3D::operator-(const Vector3D& b) {
          return vector3d;
       }
 
+float Vector3D::dot(Vector3D other) {
+	return x * other.x + y * other.y + z * other.z;
+}
+
 Vector3D::~Vector3D()
 {
-	// TODO Auto-generated destructor stub
 }
 

@@ -6,7 +6,6 @@
 #include <AccelManager.h>
 #include <settings/ledSettings.h>
 
-
 class Animation {
 public:
 	int ledsPerStrip = LedSettings::LEDS_PER_STRIP;
@@ -31,6 +30,13 @@ public:
 	void setPixelFromTopF(uint8_t rIndex, float y, CHSV chsv);
 	void setPixelFromBottom(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromBottomF(uint8_t rIndex, float y, CHSV chsv);
+
+	Vector3D getRadialCoord(int ledIndex);
+	VectorFloat accel2hat(VectorFloat v);
+	VectorFloat hat2accel(VectorFloat v);
+	VectorFloat grav2hat(VectorFloat v);
+	VectorFloat hat2grav(VectorFloat v);
+
 	uint8_t clamp(uint8_t ledCoord);
 	void addDollar(uint8_t r, uint8_t opacity);
 

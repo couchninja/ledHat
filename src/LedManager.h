@@ -17,6 +17,7 @@
 #include<animation/BrightnessSettingsAnimation.h>
 #include<animation/DebugAnimation.h>
 #include<animation/FireAnimation.h>
+#include<animation/GravAnimation.h>
 #include<animation/HorizonAnimation.h>
 #include<animation/MovingDotAnimation.h>
 #include<animation/RainbowAnimation.h>
