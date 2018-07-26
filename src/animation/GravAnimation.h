@@ -13,8 +13,11 @@ public:
 	float lastGravAngle = 0;
 	float gravAngleVelocity = 0;
 
+	byte * heat = new byte[LedSettings::LEDS_PER_STRIP];
+
 	GravAnimation(AccelManager * accelManager);
 	void step();
+	void oldStep();
 
 	virtual ~GravAnimation();
 };
