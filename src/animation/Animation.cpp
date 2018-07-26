@@ -77,27 +77,28 @@ uint8_t Animation::clamp(uint8_t ledCoord) {
 	return _min(_max(ledCoord, 0), (numLeds - 1));
 }
 
+// relative angle (so, not in rad)
 #define ANGLE_PER_LED 1.0f/((float)LedSettings::LEDS_PER_STRIP)
 
-Vector3D Animation::getRadialCoord(int ledIndex){
+Vector3D Animation::getRadialCoord(int ledIndex) {
 	VectorFloat ledCoord = VectorFloat();
-			ledCoord.z = 0;
+	ledCoord.z = 0;
 
-			// ARON make direction a variable
-			// angle fraction, from back of the hat, clockwise (when looking from the top)
-			float angle = ledIndex * ANGLE_PER_LED;
+	// ARON make direction a variable
+	// angle fraction, from back of the hat, clockwise (when looking from the top)
+	float angle = ledIndex * ANGLE_PER_LED;
 
-			// make counter clockwise
-			angle = 1. - angle;
-			// rotate to correct frame (+x to the right of the hat, +y to the front)
-			angle = angle - 0.25;
-			// convert to rads
-			angle = angle * 2.f * PI;
+	// make counter clockwise
+	angle = 1. - angle;
+	// rotate to correct frame (+x to the right of the hat, +y to the front)
+	angle = angle - 0.25;
+	// convert to rads
+	angle = angle * 2.f * PI;
 
-			ledCoord.x = cos(angle);
-			ledCoord.y = sin(angle);
+	ledCoord.x = cos(angle);
+	ledCoord.y = sin(angle);
 
-			return ledCoord;
+	return ledCoord;
 }
 
 VectorFloat Animation::accel2hat(VectorFloat v) {

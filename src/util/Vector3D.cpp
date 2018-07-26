@@ -19,6 +19,7 @@ Vector3D::Vector3D(VectorFloat v)
 	this->z = v.z;
 }
 
+// ARON rename lerp?
 void Vector3D::mix(Vector3D other, float otherFrac) {
 	float keepFrac = 1.f - otherFrac;
 

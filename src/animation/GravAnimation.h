@@ -10,6 +10,9 @@ public:
 	int hue = 0;
 	int idleCounter = 0;
 
+	float lastGravAngle = 0;
+	float gravAngleVelocity = 0;
+
 	GravAnimation(AccelManager * accelManager);
 	void step();
 
