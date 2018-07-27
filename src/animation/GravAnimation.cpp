@@ -81,7 +81,7 @@ void GravAnimation::step() {
 
 	int ledIndex = gravAngle * LedSettings::LEDS_PER_STRIP;
 	ledIndex = (ledIndex + LedSettings::LEDS_PER_STRIP) % LedSettings::LEDS_PER_STRIP;
-	if(motion){
+	if (motion) {
 		heat[ledIndex] = 255;
 
 		int spread = 10;
@@ -95,8 +95,10 @@ void GravAnimation::step() {
 		}
 	}
 
+	float hueSteps = 255.0 / ((float) LedSettings::LEDS_PER_STRIP);
+
 	for (int i = 0; i < LedSettings::LEDS_PER_STRIP; i++) {
-		leds[i] = CHSV((i * 4 + hue) % 256, 255, heat[i]);
+		leds[i] = CHSV(int(i * hueSteps + hue) % 256, 255, heat[i]);
 	}
 
 	// housekeeping
