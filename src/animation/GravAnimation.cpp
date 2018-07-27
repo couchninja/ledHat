@@ -3,6 +3,7 @@
 
 GravAnimation::GravAnimation(AccelManager * accelManager) :
 		Animation(accelManager) {
+	heat = new byte[LedSettings::LEDS_PER_STRIP];
 }
 
 float lerp(float one, float two, float fractionOfTwo) {
@@ -11,12 +12,13 @@ float lerp(float one, float two, float fractionOfTwo) {
 
 // return modulus on the positive side
 float posimodo(float a, float n) {
+	// this broke the heat array after a while when implemented like this for int... is this ok?
 	return a - floor(a / n) * n;
 }
 
 // return modulus on the positive side
 int posimodoi(int a, int n) {
-	return a - floor(a / n) * n;
+	return (a % n + n)%n;
 }
 
 float normalise(float num) {
@@ -26,6 +28,10 @@ float normalise(float num) {
 float normAngleDiff(float targetA, float sourceA) {
 	float a = targetA - sourceA;
 	return posimodo((a + 1), 1) - 0.5;
+}
+
+int clampi(int num, int lower, int upper) {
+	return min(upper, max(lower, num));
 }
 
 float normAngleLerp(float one, float two, float fractionOfTwo) {
@@ -69,7 +75,7 @@ void GravAnimation::step() {
 
 	bool motion = false;
 
-	if (accelManager->rollingGravityDelta.getMagnitude() > 0.005) {
+	if (accelManager->rollingGravityDelta.getMagnitude() > 0.001) {
 		motion = true;
 	} else {
 		motion = false;
@@ -77,6 +83,7 @@ void GravAnimation::step() {
 
 	for (int i = 0; i < LedSettings::LEDS_PER_STRIP; i++) {
 		heat[i] = qsub8(heat[i], 60);
+//		heat[i] = max((uint8_t) 0, qsub8(heat[i], 60));
 	}
 
 	int ledIndex = gravAngle * LedSettings::LEDS_PER_STRIP;
@@ -92,14 +99,23 @@ void GravAnimation::step() {
 					min(heat[ledIndex - 1] + brightness, 255);
 			heat[posimodoi(ledIndex + i, LedSettings::LEDS_PER_STRIP)] =
 					min(heat[ledIndex + 1] + brightness, 255);
+
+//			heat[clampi(ledIndex - i, 0, LedSettings::LEDS_PER_STRIP - 1)] =
+////					brightness;
+//					min(heat[ledIndex - 1] + brightness, 255);;
+//			heat[clampi(ledIndex + i, 0, LedSettings::LEDS_PER_STRIP - 1)] =
+//					min(heat[ledIndex + 1] + brightness, 255);
+////					brightness;
 		}
 	}
 
 	float hueSteps = 255.0 / ((float) LedSettings::LEDS_PER_STRIP);
 
 	for (int i = 0; i < LedSettings::LEDS_PER_STRIP; i++) {
-		leds[i] = CHSV(int(i * hueSteps + hue) % 256, 255, heat[i]);
+		leds[i] = CHSV(int(i * hueSteps + hue) % 255, 255, heat[i]);
 	}
+
+//	leds[ledIndex] = CRGB(255, 255, 255);
 
 	// housekeeping
 	hue += 1;

@@ -14,7 +14,7 @@ LedManager * ledManager;
 AccelManager * accelManager;
 ButtonManager * buttonManager;
 
-#define MS_PER_LED_UPDATE 20
+#define MS_PER_LED_UPDATE 10
 #define MS_PER_OTA_CHECK 50
 #define MS_PER_BUTTON_CHECK 50
 
@@ -34,7 +34,7 @@ void setup() {
 	pinMode(2, OUTPUT);
 	pinMode(LedSettings::BUTTON_PIN, INPUT);
 
-	otaManager = new OtaManager(true);
+	otaManager = new OtaManager(false);
 	// haven't seen this work yet but maybe the button wiring is broken
 	while (!digitalRead(LedSettings::BUTTON_PIN)) {
 		Serial.println("Button down at boot: check for updates");
