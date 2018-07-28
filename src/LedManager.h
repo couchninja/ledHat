@@ -37,6 +37,7 @@ public:
 	LedManager(int otaState, AccelManager * accelManager);
 	void fillRed();
 	void step();
+	void fastStep();
 	void handleClick();
 	void handleLongPress();
 	virtual ~LedManager();

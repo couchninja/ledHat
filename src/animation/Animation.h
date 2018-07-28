@@ -25,6 +25,8 @@ public:
 	virtual void step() = 0;
 	virtual void handleClick();
 
+	virtual void fastStep();
+
 	void setPixel(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromTop(uint8_t rIndex, uint8_t y, CHSV chsv);
 	void setPixelFromTopF(uint8_t rIndex, float y, CHSV chsv);

@@ -4,6 +4,10 @@ Animation::Animation(AccelManager * accelManager) {
 	this->accelManager = accelManager;
 }
 
+void Animation::fastStep() {
+//	Serial.println("Animation::fastStep");
+}
+
 void Animation::handleClick() {
 	Serial.println("Animation::handleClick");
 }

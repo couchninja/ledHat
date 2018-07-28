@@ -17,6 +17,7 @@ public:
 
 	GravAnimation(AccelManager * accelManager);
 	void step();
+	void fastStep();
 	void oldStep();
 
 	virtual ~GravAnimation();

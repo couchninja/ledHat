@@ -34,6 +34,8 @@ LedManager::LedManager(int otaState, AccelManager * accelManager) {
 	delay(200);
 }
 
+
+
 void LedManager::step() {
 	Animation * activeAnim;
 
@@ -47,6 +49,18 @@ void LedManager::step() {
 	memmove(&leds[0], &activeAnim->leds[0], LedSettings::NUM_LEDS * sizeof(CRGB));
 
 	FastLED.show();
+}
+
+void LedManager::fastStep() {
+	Animation * activeAnim;
+
+	if (this->settingsMode) {
+		activeAnim = brightnessSettingsAnimation;
+	} else {
+		activeAnim = animations[mode];
+	}
+
+	activeAnim->fastStep();
 }
 
 void LedManager::handleClick() {

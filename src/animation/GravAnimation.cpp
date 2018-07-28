@@ -83,7 +83,6 @@ void GravAnimation::step() {
 
 	for (int i = 0; i < LedSettings::LEDS_PER_STRIP; i++) {
 		heat[i] = qsub8(heat[i], 60);
-//		heat[i] = max((uint8_t) 0, qsub8(heat[i], 60));
 	}
 
 	int ledIndex = gravAngle * LedSettings::LEDS_PER_STRIP;
@@ -99,13 +98,6 @@ void GravAnimation::step() {
 					min(heat[ledIndex - 1] + brightness, 255);
 			heat[posimodoi(ledIndex + i, LedSettings::LEDS_PER_STRIP)] =
 					min(heat[ledIndex + 1] + brightness, 255);
-
-//			heat[clampi(ledIndex - i, 0, LedSettings::LEDS_PER_STRIP - 1)] =
-////					brightness;
-//					min(heat[ledIndex - 1] + brightness, 255);;
-//			heat[clampi(ledIndex + i, 0, LedSettings::LEDS_PER_STRIP - 1)] =
-//					min(heat[ledIndex + 1] + brightness, 255);
-////					brightness;
 		}
 	}
 
@@ -120,6 +112,10 @@ void GravAnimation::step() {
 	// housekeeping
 	hue += 1;
 	lastGravAngle = gravAngle;
+}
+
+void GravAnimation::fastStep(){
+
 }
 
 void GravAnimation::oldStep() {

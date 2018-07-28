@@ -34,7 +34,7 @@ void setup() {
 	pinMode(2, OUTPUT);
 	pinMode(LedSettings::BUTTON_PIN, INPUT);
 
-	otaManager = new OtaManager(false);
+	otaManager = new OtaManager(true);
 	// haven't seen this work yet but maybe the button wiring is broken
 	while (!digitalRead(LedSettings::BUTTON_PIN)) {
 		Serial.println("Button down at boot: check for updates");
@@ -63,6 +63,7 @@ void loop() {
 		lastOtaCheck = now;
 	}
 
+	ledManager->fastStep();
 	// this does not catch up if missing a frame
 	if (now - lastLedStep > MS_PER_OTA_CHECK) {
 		ledManager->step();
