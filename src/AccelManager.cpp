@@ -286,8 +286,12 @@ void AccelManager::step() {
 
 		/// rolling gravity calculations
 
+		gravityDelta = lastGravity - gravity;
+
 		rollingGravity.mix(gravity, 0.1);
 		rollingGravityDelta = lastRollingGravity - rollingGravity;
+
+		lastGravity = gravity;
 		lastRollingGravity = rollingGravity;
 	}
 }

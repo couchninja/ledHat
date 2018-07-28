@@ -36,8 +36,10 @@ public:
 	float rollingMaxAARealDiff = 0;
 
 	Vector3D rollingGravity = Vector3D();
-	Vector3D lastRollingGravity = Vector3D();
+	Vector3D gravityDelta= Vector3D();
 	Vector3D rollingGravityDelta= Vector3D();
+	Vector3D lastGravity = Vector3D();
+	Vector3D lastRollingGravity = Vector3D();
 
 	bool motionTriggered = false;
 	bool consumeMotionTriggered();

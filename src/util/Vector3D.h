@@ -17,8 +17,10 @@ public:
 	void mix(Vector3D other, float otherFrac);
 	void sub(Vector3D other);
 	float dot(Vector3D other);
+	void scalef(float s);
 	String toString();
-	Vector3D operator-(const Vector3D& b);
+	Vector3D operator-(const Vector3D& other);
+	Vector3D operator+(const Vector3D& other);
 };
 
 #endif /* SRC_UTIL_VECTOR3D_H_ */

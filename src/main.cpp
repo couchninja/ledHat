@@ -14,7 +14,8 @@ LedManager * ledManager;
 AccelManager * accelManager;
 ButtonManager * buttonManager;
 
-#define MS_PER_LED_UPDATE 10
+#define MS_PER_LED_UPDATE 20
+#define MS_PER_FASTSTEP_UPDATE 20
 #define MS_PER_OTA_CHECK 50
 #define MS_PER_BUTTON_CHECK 50
 
@@ -23,6 +24,7 @@ ButtonManager * buttonManager;
 #define BAUDRATE 9600
 
 long lastLedStep = 0;
+long lastFastStep = 0;
 long lastOtaCheck = 0;
 long lastButtonCheck = 0;
 
@@ -63,9 +65,14 @@ void loop() {
 		lastOtaCheck = now;
 	}
 
-	ledManager->fastStep();
+
+	if (now - lastFastStep > MS_PER_FASTSTEP_UPDATE) {
+		ledManager->fastStep();
+		lastFastStep = now;
+		}
+
 	// this does not catch up if missing a frame
-	if (now - lastLedStep > MS_PER_OTA_CHECK) {
+	if (now - lastLedStep > MS_PER_LED_UPDATE) {
 		ledManager->step();
 		lastLedStep = now;
 	}

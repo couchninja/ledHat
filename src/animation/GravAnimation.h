@@ -10,8 +10,11 @@ public:
 	int hue = 0;
 	int idleCounter = 0;
 
+	float gravAngle = 0;
+	float smoothGravAngle = 0;
 	float lastGravAngle = 0;
 	float gravAngleVelocity = 0;
+	float gravAngleAcceleration = 0;
 
 	byte * heat;
 
