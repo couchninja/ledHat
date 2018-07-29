@@ -18,13 +18,14 @@ float posimodo(float a, float n) {
 
 // return modulus on the positive side
 int posimodoi(int a, int n) {
-	return (a % n + n)%n;
+	return (a % n + n) % n;
 }
 
 float normalise(float num) {
 	return posimodo(num, 1);
 }
 
+// returns between -0.5 an +0.5
 float normAngleDiff(float targetA, float sourceA) {
 	float a = targetA - sourceA;
 	return posimodo((a + 1), 1) - 0.5;
@@ -56,7 +57,7 @@ float normAngleLerp(float one, float two, float fractionOfTwo) {
 //	return normalise(one * (1 - fractionOfTwo) + two * fractionOfTwo);
 }
 
-void GravAnimation::fastStep(){
+void GravAnimation::fastStep() {
 	Vector3D gravHat = grav2hat(accelManager->gravityDelta);
 	gravHat.z = 0;
 	gravHat.normalize(); // probably not needed anymore
@@ -73,58 +74,48 @@ void GravAnimation::fastStep(){
 	// in [0...1], starting from back of hat, clockwise
 	gravAngle = normalise(gravAngle + 0.25);
 
-	if (accelManager->rollingGravityDelta.getMagnitude() > 0.0005) {
-		//		float dampenedGravAngle = normAngleLerp(lastGravAngle, gravAngle, 0.3);
-		//		gravAngle = normAngleLerp(lastGravAngle, gravAngle, 0.8);
-
+	if (accelManager->rollingGravityDelta.getMagnitude() > 0.001) {
+		// -0.5 ... 0,5
 		float attraction = normAngleDiff(lastGravAngle, smoothGravAngle);
 
-		float maxAttraction = 0.1;
+		if (attraction < -0.2)
+			attraction += 1.0;
+
+		float const maxAttraction = 0.1;
 
 		attraction = clampf(attraction, -maxAttraction, maxAttraction);
 
-		gravAngleVelocity = lerp(gravAngleVelocity, attraction, 0.2);
+		gravAngleVelocity = lerp(gravAngleVelocity, attraction, 0.15);
+//		gravAngleVelocity = lerp(gravAngleVelocity, attraction,
+//						accelManager->rollingGravityDelta.getMagnitude()*10.0);
 
 		float const maxVelocity = 0.1;
 		gravAngleVelocity = clampf(gravAngleVelocity, -maxVelocity, maxVelocity);
-
-//		gravAngleAcceleration = lerp(gravAngleAcceleration, attraction, 0.1);
-
-//		gravAngleVelocity = max(-0.1f, min(0.1f, gravAngleVelocity));
-
-		//		gravAngle = normAngleLerp(lastGravAngle, gravAngle, 0.3);
-		//		gravAngle = normalise(lastGravAngle + gravAngleVelocity);
 	} else {
 		// friction
 		gravAngleVelocity *= 0.9;
-
-//		gravAngleMomentum = lerp(gravAngleVelocity, attraction, 0.3);
 	}
 
-//	gravAngleVelocity = 0.1;
-
-//	gravAngleVelocity = gravAngleVelocity + gravAngleAcceleration;
 	smoothGravAngle = normalise(smoothGravAngle + gravAngleVelocity);
+
+	motionNess = lerp(motionNess, accelManager->rollingGravityDelta.getMagnitude(), 0.005);
 
 	// housekeeping
 	lastGravAngle = gravAngle;
 }
 
 void GravAnimation::step() {
-//	leds.fadeToBlackBy(80);
-//	leds.fill_solid(CRGB(0, 0, 0));
-
 	bool motion = false;
 
-//	if (accelManager->rollingGravityDelta.getMagnitude() > 0.001) {
-//		motion = true;
-//	} else {
-//		motion = false;
-//	}
-	motion = true;
+	if (motionNess > 0.003) {
+		motion = true;
+	} else {
+		motion = false;
+	}
+//	motion = true;
 
 	for (int i = 0; i < LedSettings::LEDS_PER_STRIP; i++) {
-		heat[i] = qsub8(heat[i], 60);
+		heat[i] = qsub8(heat[i], 40);
 	}
 
 	int ledIndex = smoothGravAngle * LedSettings::LEDS_PER_STRIP;
@@ -132,7 +123,7 @@ void GravAnimation::step() {
 	if (motion) {
 		heat[ledIndex] = 255;
 
-		int spread = 10;
+		int const spread = 15;
 
 		for (int i = 0; i < spread; i++) {
 			int brightness = 255 - 255 / spread;
@@ -145,8 +136,14 @@ void GravAnimation::step() {
 
 	float hueSteps = 255.0 / ((float) LedSettings::LEDS_PER_STRIP);
 
-	for (int i = 0; i < LedSettings::LEDS_PER_STRIP; i++) {
-		leds[i] = CHSV(int(i * hueSteps + hue) % 255, 255, heat[i]);
+	if (motion) {
+		for (int i = 0; i < LedSettings::LEDS_PER_STRIP; i++) {
+			leds[i] = CHSV(int(i * hueSteps + hue) % 255, 255, heat[i]);
+		}
+	} else {
+		for (int i = 0; i < LedSettings::LEDS_PER_STRIP; i++) {
+			leds[i] = CHSV(int(i * hueSteps + hue) % 255, 255, 255);
+		}
 	}
 
 //	leds[ledIndex] = CRGB(255, 255, 255);

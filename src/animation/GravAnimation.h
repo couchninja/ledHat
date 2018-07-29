@@ -15,6 +15,7 @@ public:
 	float lastGravAngle = 0;
 	float gravAngleVelocity = 0;
 	float gravAngleAcceleration = 0;
+	float motionNess = 0;
 
 	byte * heat;
 
