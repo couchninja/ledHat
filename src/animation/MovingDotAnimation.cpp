@@ -1,14 +1,7 @@
 #include <animation/MovingDotAnimation.h>
 
-
-
-uint8_t hue;
-uint8_t offset;
-
-int idleCounter2 = 0;
-
 MovingDotAnimation::MovingDotAnimation(AccelManager * accelManager) :
-				Animation(accelManager) {
+		Animation(accelManager) {
 }
 
 void MovingDotAnimation::step() {
@@ -16,14 +9,11 @@ void MovingDotAnimation::step() {
 	leds.blur1d(200);
 
 	// scaled to approx 0...255
-	float intensity = accelManager->rollingAARealDiff / accelManager->rollingMaxAARealDiff * 255; // * (numStrips - 1);
+	float intensity = accelManager->rollingAARealDiff / accelManager->rollingMaxAARealDiff * 255;
 
 	if (intensity < 230) {
-			intensity = 0;
-			idleCounter2++;
-		} else {
-			idleCounter2 = 0;
-		}
+		intensity = 0;
+	}
 
 	intensity = _max(50, intensity);
 
@@ -39,7 +29,6 @@ void MovingDotAnimation::step() {
 		for (uint8_t hline = 0; hline < numStrips; hline++) {
 			int lineOffset = offset + ledsPerStrip / dots * vline;
 			lineOffset %= ledsPerStrip;
-//			int sat = (255.0 / 4.0) * (float) (numStrips - hline - 1);
 			int sat = 150;
 			leds[hline * ledsPerStrip + lineOffset] = CHSV(hue + intensity, sat, 255);
 		}

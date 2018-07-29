@@ -121,6 +121,94 @@ VectorFloat Animation::hat2grav(VectorFloat v) {
 	return VectorFloat(-v.z, v.x, v.y);
 }
 
+float Animation::lerp(float one, float two, float fractionOfTwo) {
+	return one * (1 - fractionOfTwo) + two * fractionOfTwo;
+}
+
+// return modulus on the positive side. Workings not confirmed.
+float Animation::posimodof(float a, float n) {
+	// this broke the heat array after a while when implemented like this for int... is this ok?
+	return a - floor(a / n) * n;
+}
+
+// return modulus on the positive side. Workings confirmed.
+int Animation::posimodoi(int a, int n) {
+	return (a % n + n) % n;
+}
+
+float Animation::normaliseFrangle(float num) {
+	return posimodof(num, 1);
+}
+
+int Animation::normaliseLedIndex(int num) {
+	return posimodof(num, LedSettings::LEDS_PER_STRIP);
+}
+
+// returns between -0.5 and +0.5
+float Animation::frangleDiff(float targetA, float sourceA) {
+	float a = targetA - sourceA;
+	return posimodof((a + 1), 1) - 0.5;
+}
+
+int Animation::clampi(int num, int lower, int upper) {
+	return min(upper, max(lower, num));
+}
+
+float Animation::clampf(float num, float lower, float upper) {
+	return min(upper, max(lower, num));
+}
+
+// not proven to work
+float Animation::frangleLerp(float one, float two, float fractionOfTwo) {
+	one = normaliseFrangle(one);
+	two = normaliseFrangle(two);
+
+	float diff = two - one;
+
+	if (diff > 0.5) {
+		diff = two - (one + 1);
+	}
+
+	float diff2 = frangleDiff(one, two);
+
+	return normaliseFrangle(one + fractionOfTwo * diff);
+
+	// ARON
+//	return normalise(one * (1 - fractionOfTwo) + two * fractionOfTwo);
+}
+
+// get Fractional Angle: [0...1], starting from back of hat, clockwise
+float Animation::toFrangle(Vector3D sensorGravity) {
+	Vector3D gravHat = grav2hat(sensorGravity);
+
+	// in rad, hat coords, counter clockwise
+	float gravFrangle = atan2(gravHat.y, gravHat.x);
+
+	// in [0...1], hat coords, counter clockwise
+	gravFrangle = gravFrangle / 2 / PI;
+
+	// in rad, hat coords, clockwise (because LEDs are mounted clockwise)
+	gravFrangle = 1 - gravFrangle;
+
+	// in [0...1], starting from back of hat, clockwise
+	gravFrangle = normaliseFrangle(gravFrangle + 0.25);
+
+	return gravFrangle;
+}
+
+// circular when leaking on edge of strip. spread is on both sides, total width is 2*spread + 1
+void Animation::addBlob(byte * byteArray, int ledIndex, int spread) {
+	byteArray[ledIndex] = 255;
+
+	for (int i = 0; i < spread; i++) {
+		int bright = 255 - 255 / spread;
+		byteArray[normaliseLedIndex(ledIndex - i)] =
+				min(byteArray[ledIndex - 1] + bright, 255);
+		byteArray[normaliseLedIndex(ledIndex + i)] =
+				min(byteArray[ledIndex + 1] + bright, 255);
+	}
+}
+
 void Animation::addDollar(uint8_t r, uint8_t opacity) {
 	CHSV dGreen = CHSV(80, 255, opacity);
 	CHSV lGreen = CHSV(80, 150, opacity);

@@ -14,7 +14,7 @@ public:
 	Vector3D(VectorFloat v);
 	virtual ~Vector3D();
 
-	void mix(Vector3D other, float otherFrac);
+	void lerp(Vector3D other, float otherFrac);
 	void sub(Vector3D other);
 	float dot(Vector3D other);
 	void scalef(float s);

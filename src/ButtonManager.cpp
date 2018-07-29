@@ -10,7 +10,7 @@ void ButtonManager::checkButton() {
 
 	if (!ignoreEverythingUntilNextUp
 			&& this->buttonDownTimestamp != -1
-			&& (millis() - this->buttonDownTimestamp) > 2000) {
+			&& (millis() - this->buttonDownTimestamp) > 1000) {
 		// long press
 		ledManager->handleLongPress();
 		ignoreEverythingUntilNextUp = true;

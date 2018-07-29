@@ -39,6 +39,18 @@ public:
 	VectorFloat grav2hat(VectorFloat v);
 	VectorFloat hat2grav(VectorFloat v);
 
+	float lerp(float one, float two, float fractionOfTwo) ;
+	float posimodof(float a, float n) ;
+	int posimodoi(int a, int n) ;
+	float normaliseFrangle(float num) ;
+	int normaliseLedIndex(int num);
+	float frangleDiff(float targetA, float sourceA) ;
+	int clampi(int num, int lower, int upper) ;
+	float clampf(float num, float lower, float upper);
+	float frangleLerp(float one, float two, float fractionOfTwo);
+	float toFrangle(Vector3D sensorGravity);
+	void addBlob(byte * byteArray, int ledIndex, int spread);
+
 	uint8_t clamp(uint8_t ledCoord);
 	void addDollar(uint8_t r, uint8_t opacity);
 

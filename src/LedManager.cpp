@@ -12,8 +12,8 @@ LedManager::LedManager(int otaState, AccelManager * accelManager) {
 	this->brightnessSettingsAnimation = new BrightnessSettingsAnimation(accelManager);
 	this->animations = vector<Animation*>();
 
-	this->animations.push_back(new GravAnimation(accelManager));
-	this->animations.push_back(new MovingDotAnimation(accelManager));
+//	this->animations.push_back(new GravAnimation(accelManager));
+	this->animations.push_back(new MovingDotAnimation2(accelManager));
 	this->animations.push_back(new RainbowAnimation(accelManager));
 //	this->animations.push_back(new FireAnimation(accelManager));
 

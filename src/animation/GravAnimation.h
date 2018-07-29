@@ -10,14 +10,15 @@ public:
 	int hue = 0;
 	int idleCounter = 0;
 
-	float gravAngle = 0;
-	float smoothGravAngle = 0;
-	float lastGravAngle = 0;
-	float gravAngleVelocity = 0;
-	float gravAngleAcceleration = 0;
+	// these are all fractional angles (1 is a full circle). starting from back of hat, clockwise
+	float gravFrangle = 0;
+	float smoothGravFrangle = 0;
+	float lastGravFrangle = 0;
+	float gravFrangleVelocity = 0;
+	float gravFrangleAcceleration = 0;
 	float motionNess = 0;
 
-	byte * heat;
+	byte * brightness;
 
 	GravAnimation(AccelManager * accelManager);
 	void step();

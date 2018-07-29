@@ -10,6 +10,7 @@ void BrightnessSettingsAnimation::step() {
 
 	for (int i = 0; i <= this->brightnessIndex; i++) {
 		leds[i] = CRGB(255, 255, 255);
+		leds[LedSettings::NUM_LEDS/2 + i] = CRGB(255, 255, 255);
 	}
 }
 
