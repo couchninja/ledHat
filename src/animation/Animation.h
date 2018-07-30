@@ -49,7 +49,7 @@ public:
 	float clampf(float num, float lower, float upper);
 	float frangleLerp(float one, float two, float fractionOfTwo);
 	float toFrangle(Vector3D sensorGravity);
-	void addBlob(byte * byteArray, int ledIndex, int spread);
+	void addBlob(byte * byteArray, int ledIndex, int spread, bool add);
 
 	uint8_t clamp(uint8_t ledCoord);
 	void addDollar(uint8_t r, uint8_t opacity);

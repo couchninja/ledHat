@@ -54,7 +54,7 @@ void GravAnimation::step() {
 	int ledIndex = smoothGravFrangle * LedSettings::LEDS_PER_STRIP;
 	ledIndex = (ledIndex + LedSettings::LEDS_PER_STRIP) % LedSettings::LEDS_PER_STRIP;
 	if (motion) {
-		addBlob(brightness, ledIndex, 15);
+		addBlob(brightness, ledIndex, 15, false);
 	}
 
 	float hueSteps = 255.0 / ((float) LedSettings::LEDS_PER_STRIP);

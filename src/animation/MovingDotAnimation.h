@@ -6,7 +6,6 @@
 class MovingDotAnimation: public Animation {
 public:
 	uint8_t hue = 0;
-	uint8_t offset = 0;
 
 	MovingDotAnimation(AccelManager * accelManager);
 	void step();

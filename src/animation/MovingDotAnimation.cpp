@@ -19,7 +19,7 @@ void MovingDotAnimation::step() {
 
 	// normalize to 0 ... 1 (not sure about inclusive/exclusive)
 	float pitchNormalized = (accelManager->ypr[2] + M_PI / 2) / (M_PI);
-	offset = pitchNormalized * ledsPerStrip;
+	int offset = pitchNormalized * ledsPerStrip;
 
 	offset %= ledsPerStrip;
 

@@ -21,6 +21,7 @@
 #include<animation/HorizonAnimation.h>
 #include<animation/MovingDotAnimation.h>
 #include<animation/MovingDotAnimation2.h>
+#include<animation/MovingDotAnimation3.h>
 #include<animation/RainbowAnimation.h>
 #include<animation/StableDollarAnimation.h>
 

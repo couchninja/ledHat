@@ -141,7 +141,7 @@ float Animation::normaliseFrangle(float num) {
 }
 
 int Animation::normaliseLedIndex(int num) {
-	return posimodof(num, LedSettings::LEDS_PER_STRIP);
+	return posimodoi(num, LedSettings::LEDS_PER_STRIP);
 }
 
 // returns between -0.5 and +0.5
@@ -197,15 +197,21 @@ float Animation::toFrangle(Vector3D sensorGravity) {
 }
 
 // circular when leaking on edge of strip. spread is on both sides, total width is 2*spread + 1
-void Animation::addBlob(byte * byteArray, int ledIndex, int spread) {
+void Animation::addBlob(byte * byteArray, int ledIndex, int spread, bool add) {
 	byteArray[ledIndex] = 255;
 
+	const float spreadFrac = 1.0f/((float)spread);
+
 	for (int i = 0; i < spread; i++) {
-		int bright = 255 - 255 / spread;
-		byteArray[normaliseLedIndex(ledIndex - i)] =
-				min(byteArray[ledIndex - 1] + bright, 255);
-		byteArray[normaliseLedIndex(ledIndex + i)] =
-				min(byteArray[ledIndex + 1] + bright, 255);
+		int bright = 255 - 255 * i * spreadFrac;
+		if (add) {
+			// capping at 255 is defenitely needed
+			byteArray[normaliseLedIndex(ledIndex - i)] = qadd8(byteArray[ledIndex - 1], bright);
+			byteArray[normaliseLedIndex(ledIndex + i)] = qadd8(byteArray[ledIndex + 1], bright);
+		} else {
+			byteArray[normaliseLedIndex(ledIndex - i)] = bright;
+			byteArray[normaliseLedIndex(ledIndex + i)] = bright;
+		}
 	}
 }
 
