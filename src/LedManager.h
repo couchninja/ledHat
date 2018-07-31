@@ -24,6 +24,7 @@
 #include<animation/MovingDotAnimation3.h>
 #include<animation/RainbowAnimation.h>
 #include<animation/StableDollarAnimation.h>
+#include<animation/SlidingAnimation.h>
 
 using namespace std;
 
